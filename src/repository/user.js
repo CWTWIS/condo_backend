@@ -8,3 +8,10 @@ module.exports.update = async ({ id }, data) => await prisma.user.update({ where
 module.exports.delete = async ({ id }) => await prisma.user.delete({ where: { id } })
 
 // =========================================== CUSTOM REPOSITORY ===================================
+
+module.exports.findUserNameOrMobileOrEmail = async (data) =>
+    await prisma.user.findFirst({
+        where: {
+            OR: [{ email: data.email }, { mobile: data.mobile }, { username: data.username }],
+        },
+    })
