@@ -12,4 +12,4 @@ async function seeding() {
         },
     })
 }
-seeding()
+// seeding()

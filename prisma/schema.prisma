@@ -14,26 +14,144 @@ datasource db {
 }
 
 model User {
-  id              String   @id @default(uuid())
-  username        String   @unique
-  password        String
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt @map("updated_at")
-  firstName       String   @map("first_name")
-  lastName        String   @map("last_name")
-  phoneNumber     String?  @map("phone_number")
-  profileImageUrl String?  @map("profile_image_url")
-  birthDate       String?  @map("birth_date")
-  gender          Gender   @default(MALE)
-  role            Role
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String
+  firstName String   @map("first_name")
+  lastName  String   @map("last_name")
+  email     String   @unique
+  mobile    String?  @unique
+  role      Role     @default(USER)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  Reviews Review[]
+
+  senders   Chat[] @relation("sender")
+  receivers Chat[] @relation("receiver")
+  Posts     Post[]
+
+  @@map("users")
 }
 
 enum Role {
   USER
   ADMIN
+  AGENT
+
+  @@map("roles")
 }
 
-enum Gender {
-  MALE
-  FEMALE
+model Review {
+  id      Int     @id @default(autoincrement())
+  User    User    @relation(fields: [userId], references: [id])
+  userId  Int
+  rating  Decimal @db.Decimal(4, 1)
+  comment String  @db.LongText
+
+  @@map("reviews")
+}
+
+model Chat {
+  id       Int  @id @default(autoincrement())
+  sender   User @relation(name: "sender", fields: [senderId], references: [id])
+  senderId Int  @map("sender_id")
+
+  recevier   User     @relation(name: "receiver", fields: [recevierId], references: [id])
+  recevierId Int      @map("recevier_id")
+  message    String   @db.VarChar(255)
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+
+  @@map("chats")
+}
+
+model Post {
+  id         Int      @id @default(autoincrement())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int      @map("user_id")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+  expriesAt  DateTime @map("expries_at")
+  postStatus Boolean  @default(false) @map("post_status")
+
+  room         Room?         @relation(fields: [roomId], references: [id])
+  roomId       Int           @unique @map("room_id")
+  Transactions Transaction[]
+
+  @@map("posts")
+}
+
+model Room {
+  id          Int     @id @default(autoincrement())
+  price       Decimal @db.Decimal(10, 2)
+  roomNumber  String  @map("room_number")
+  roomSize    Decimal @map("room_size") @db.Decimal(10, 2)
+  bedroom     Int
+  bathroom    Int
+  floor       String
+  building    String
+  isAvaliable Boolean @default(true) @map("is_avalible")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  Post      Post?
+  RoomUtils RoomUtils[]
+  Image     Image[]
+
+  condo   Condo @relation(fields: [condoId], references: [id])
+  condoId Int   @map("condo_id")
+
+  @@map("rooms")
+}
+
+model Transaction {
+  id        Int     @id @default(autoincrement())
+  post      Post    @relation(fields: [postId], references: [id])
+  postId    Int     @map("post_id")
+  paymentId String  @map("payment_id")
+  amount    Decimal @db.Decimal(10, 2)
+  days      Int
+
+  @@map("transactions")
+}
+
+model Condo {
+  id       Int    @id @default(autoincrement())
+  name     String
+  lat      String
+  long     String
+  district String
+  location String
+  province String
+  condoPic String @map("condo_pic")
+  Room     Room[]
+
+  @@map("condos")
+}
+
+model RoomUtils {
+  id Int @id @default(autoincrement())
+
+  room      Room    @relation(fields: [roomId], references: [id])
+  roomId    Int     @map("room_id")
+  utility   Utility @relation(fields: [utilityId], references: [id])
+  utilityId Int     @map("util_id")
+
+  @@map("room_utils")
+}
+
+model Utility {
+  id        Int         @id @default(autoincrement())
+  name      String
+  RoomUtils RoomUtils[]
+
+  @@map("utilities")
+}
+
+model Image {
+  id     Int    @id @default(autoincrement())
+  room   Room   @relation(fields: [roomId], references: [id])
+  roomId Int    @map("room_id")
+  url    String
 }
