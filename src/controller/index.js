@@ -1,5 +1,4 @@
 const controller = {
-    user: require("./user"),
-    agent: require("./agent"),
+    auth: require("./auth"),
 }
 module.exports = controller

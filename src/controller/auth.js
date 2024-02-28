@@ -37,7 +37,7 @@ module.exports.login = utils.catchError(async (req, res, next) => {
     delete user.password
     // SIGN token from user data
     const token = utils.jwt.sign(user)
-    res.status(200).json({ token, user })
+    res.status(200).json({ token })
 })
 
 // edit
@@ -60,7 +60,33 @@ module.exports.register = utils.catchError(async (req, res, next) => {
     delete user.password
     // SIGN token from user data
 
-    const token = utils.jwt.sign({ id: user.id, username: user.username })
+    const token = utils.jwt.sign(user)
+
+    res.status(200).json({ token })
+})
+
+module.exports.registerAgent = utils.catchError(async (req, res, next) => {
+    const data = {}
+    data.username = req.body?.username
+    data.mobile = req.body?.mobile
+    data.email = req.body?.email
+
+    const existsUser = await repo.agent.findUserNameOrMobileOrEmail(data)
+
+    // check username mobile or email
+    if (existsUser) utils.checkExistCredential(existsUser, req.body)
+
+    const hashed = await utils.bcrypt.hashed(req.body.password)
+
+    req.body.password = hashed
+
+    req.body.role = "AGENT"
+
+    const agent = await repo.user.create(req.body)
+
+    delete agent.password
+
+    const token = utils.jwt.sign(agent)
 
     res.status(200).json({ token })
 })

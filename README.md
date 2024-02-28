@@ -1,3 +1,29 @@
+# Condo_back
+
+## service api
+
+### /auth
+
+| path            | method | authen?      | validate?      | params | req.body                                                                     | status code | res                                                             | remark                         |
+| --------------- | ------ | ------------ | -------------- | ------ | ---------------------------------------------------------------------------- | ----------- | --------------------------------------------------------------- | ------------------------------ |
+| /register       | POST   | ---          | validate (joi) | ---    | {email, password, confirmPassword, firstName, lastName, email, role}         | 200         | {token}                                                         | token = {user}                 |
+|                 |        |              |                |        |                                                                              | 403         | {message: "EMAIL_IN_USE", name: "403_FORBIDDEN"}                |                                |
+|                 |        |              |                |        |                                                                              | 403         | {message: "MOBILE_IN_USE", name: "403_FORBIDDEN"}               |                                |
+|                 |        |              |                |        |                                                                              | 403         | {message: "USERNAME_IN_USE", name: "403_FORBIDDEN"}             |                                |
+| /register/agent | POST   | ---          | validate (joi) | ---    | {email, password, confirmPassword, firstName, lastName, email, mobile, role} | 200         | {token}                                                         | token = {user}                 |
+|                 |        |              |                |        |                                                                              | 403         | {message: "EMAIL_IN_USE", name: "403_FORBIDDEN"}                |                                |
+|                 |        |              |                |        |                                                                              | 403         | {message: "MOBILE_IN_USE", name: "403_FORBIDDEN"}               |                                |
+|                 |        |              |                |        |                                                                              | 403         | {message: "USERNAME_IN_USE", name: "403_FORBIDDEN"}             |                                |
+| /login          | POST   | ---          | ?????          | ---    | { username, password }                                                       | 200         | {token}                                                         | token = {user}                 |
+|                 |        |              |                |        |                                                                              | 400         | {message: "username or password is wrong", name: "WRONG_INPUT"} | not found username in database |
+|                 |        |              |                |        |                                                                              | 400         | {message: "username or password is wrong", name: "WRONG_INPUT"} | password not match in database |
+| /               | GET    | authenticate | ---            | ---    | ---                                                                          | 200         | {users}                                                         | get all users data             |
+| /:id            | GET    | authenticate | ---            | id     | ---                                                                          | 200         | {user}                                                          | get user data by id            |
+| /:id            | PUT    | authenticate | ---            | id     | { firstName, lastName }                                                      | 200         | {user}                                                          |                                |
+| /:id            | DELETE | authenticate | ---            | id     | ---                                                                          | 200         | ---                                                             |                                |
+
+# From template
+
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.

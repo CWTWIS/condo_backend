@@ -9,8 +9,7 @@ const morgan = require("morgan")
 const { notFound } = require("../middlewares/notFound")
 const { errorMiddlewares } = require("../middlewares/error")
 const CustomError = require("../config/error")
-const userRoute = require("../router/user")
-const agentRoute = require("../router/agent")
+const authRoute = require("../router/auth")
 
 //=====================================================Server Zone
 module.exports = function restApiServer(app) {
@@ -30,8 +29,7 @@ module.exports = function restApiServer(app) {
             next(new CustomError("Ping Error", "NotFoundData", 500))
         }
     })
-    app.use("/user", userRoute)
-    app.use("/agent", agentRoute)
+    app.use("/auth", authRoute)
 
     //=====================================================Throwing Zone
     app.use(notFound)
