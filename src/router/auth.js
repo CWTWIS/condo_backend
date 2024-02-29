@@ -6,12 +6,12 @@ const validateUser = require("../middlewares/validator/auth-user")
 const validateAgent = require("../middlewares/validator/auth-agent")
 const userRoute = express.Router()
 
-userRoute.get("/",authenticate, c.auth.getAll)
-userRoute.get("/:id", authenticate,c.auth.get)
+// userRoute.get("/", authenticate, c.auth.getAll)
+userRoute.get("/", authenticate, c.auth.get)
 userRoute.post("/register", validateUser.registerUser, c.auth.register)
 userRoute.post("/register/agent", validateAgent.registerAgent, c.auth.registerAgent)
 userRoute.post("/login", c.auth.login)
-userRoute.put("/:id", authenticate,c.auth.update)
+userRoute.put("/:id", authenticate, c.auth.update)
 userRoute.delete("/:id", authenticate, c.auth.delete)
 
 module.exports = userRoute
