@@ -3,15 +3,15 @@ const utils = require("../utils")
 const { CustomError } = require("../config/error")
 const { Role } = require("@prisma/client")
 
-module.exports.getAll = async (req, res, next) => {
-    try {
-        const users = await repo.user.getAll()
-        res.status(200).json({ users })
-    } catch (err) {
-        next(err)
-    }
-    return
-}
+// module.exports.getAll = async (req, res, next) => {
+//     try {
+//         const users = await repo.user.getAll()
+//         res.status(200).json({ users })
+//     } catch (err) {
+//         next(err)
+//     }
+//     return
+// }
 module.exports.get = async (req, res, next) => {
     try {
         const { id } = req.params
