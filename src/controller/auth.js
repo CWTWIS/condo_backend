@@ -37,7 +37,7 @@ module.exports.login = utils.catchError(async (req, res, next) => {
     delete user.password
     // SIGN token from user data
     const token = utils.jwt.sign(user)
-    res.status(200).json({ token })
+    res.status(200).json({ token, user })
 })
 
 // edit
@@ -62,7 +62,7 @@ module.exports.register = utils.catchError(async (req, res, next) => {
 
     const token = utils.jwt.sign(user)
 
-    res.status(200).json({ token })
+    res.status(200).json({ token, user })
 })
 
 module.exports.registerAgent = utils.catchError(async (req, res, next) => {
@@ -88,7 +88,7 @@ module.exports.registerAgent = utils.catchError(async (req, res, next) => {
 
     const token = utils.jwt.sign(agent)
 
-    res.status(200).json({ token })
+    res.status(200).json({ token, agent })
 })
 
 module.exports.update = async (req, res, next) => {
