@@ -25,7 +25,7 @@ model User {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
 
-  Reviews Review[]
+  reviews Review[]
 
   senders   Chat[] @relation("sender")
   receivers Chat[] @relation("receiver")
@@ -44,8 +44,8 @@ enum Role {
 
 model Review {
   id      Int     @id @default(autoincrement())
-  User    User    @relation(fields: [userId], references: [id])
-  userId  Int
+  user    User    @relation(fields: [userId], references: [id])
+  userId  Int     @map("user_id")
   rating  Decimal @db.Decimal(4, 1)
   comment String  @db.LongText
 
@@ -76,7 +76,7 @@ model Post {
 
   room         Room?         @relation(fields: [roomId], references: [id])
   roomId       Int           @unique @map("room_id")
-  Transactions Transaction[]
+  transactions Transaction[]
 
   @@map("posts")
 }
@@ -84,6 +84,7 @@ model Post {
 model Room {
   id          Int     @id @default(autoincrement())
   price       Decimal @db.Decimal(10, 2)
+  contract    Int
   roomNumber  String  @map("room_number")
   roomSize    Decimal @map("room_size") @db.Decimal(10, 2)
   bedroom     Int
@@ -91,13 +92,14 @@ model Room {
   floor       String
   building    String
   isAvaliable Boolean @default(true) @map("is_avalible")
+  description String? @db.TinyText
 
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
 
-  Post      Post?
-  RoomUtils RoomUtils[]
-  Image     Image[]
+  post       Post?
+  roomUtils  RoomUtil[]
+  roomImages RoomImage[]
 
   condo   Condo @relation(fields: [condoId], references: [id])
   condoId Int   @map("condo_id")
@@ -117,41 +119,63 @@ model Transaction {
 }
 
 model Condo {
-  id       Int    @id @default(autoincrement())
-  name     String
-  lat      String
-  long     String
-  district String
-  location String
-  province String
-  condoPic String @map("condo_pic")
-  Room     Room[]
+  id         Int      @id @default(autoincrement())
+  nameTh     String   @map("name_th")
+  nameEn     String   @map("name_en")
+  lat        String
+  long       String
+  location   String
+  districtId Int      @map("district_id")
+  district   District @relation(fields: [districtId], references: [id])
+  provinceId Int      @map("province_id")
+  province   Province @relation(fields: [provinceId], references: [id])
+  condoImage String   @map("condo_image")
+  postCode   String   @map("post_code")
+  rooms      Room[]
 
   @@map("condos")
 }
 
-model RoomUtils {
+model District {
+  id       Int     @id @default(autoincrement())
+  district String
+  condos   Condo[]
+
+  @@map("districts")
+}
+
+model Province {
+  id       Int     @id @default(autoincrement())
+  province String
+  condos   Condo[]
+
+  @@map("provinces")
+}
+
+model RoomUtil {
   id Int @id @default(autoincrement())
 
-  room      Room    @relation(fields: [roomId], references: [id])
-  roomId    Int     @map("room_id")
-  utility   Utility @relation(fields: [utilityId], references: [id])
-  utilityId Int     @map("util_id")
+  room   Room @relation(fields: [roomId], references: [id])
+  roomId Int  @map("room_id")
+  util   Util @relation(fields: [utilId], references: [id])
+  utilId Int  @map("util_id")
 
   @@map("room_utils")
 }
 
-model Utility {
-  id        Int         @id @default(autoincrement())
+model Util {
+  id        Int        @id @default(autoincrement())
   name      String
-  RoomUtils RoomUtils[]
+  roomUtils RoomUtil[]
 
-  @@map("utilities")
+  @@map("utils")
 }
 
-model Image {
-  id     Int    @id @default(autoincrement())
-  room   Room   @relation(fields: [roomId], references: [id])
-  roomId Int    @map("room_id")
-  url    String
+model RoomImage {
+  id        Int    @id @default(autoincrement())
+  room      Room   @relation(fields: [roomId], references: [id])
+  roomId    Int    @map("room_id")
+  roomImage String @map("room_image")
+
+  @@map("room_images")
 }
