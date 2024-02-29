@@ -1,3 +1,4 @@
+const fs = require("fs")
 const repo = require("../repository")
 const utils = require("../utils")
 const { CustomError } = require("../config/error")
@@ -10,10 +11,10 @@ exports.createPost = catchError(async (req, res, next) => {
         nameTh,
         nameEn,
         lat,
-        lng,
+        long,
         location,
-        district,
-        province,
+        districtId,
+        provinceId,
         postCode,
         price,
         contract,
@@ -27,56 +28,67 @@ exports.createPost = catchError(async (req, res, next) => {
         description,
     } = req.body
 
-    console.log("req.body", req.body)
-
-    const { id: condoId } = await repo.condo.findCondoByNameTh(nameTh)
-    if (condoByNameTh) {
+    const condoObj = await repo.condo.findCondoByNameTh(nameTh)
+    if (!condoObj) {
         const condoData = {
             nameTh,
             nameEn,
             lat,
-            lng,
+            long,
             location,
-            district,
-            province,
+            districtId: +districtId,
+            provinceId: +provinceId,
             postCode,
         }
 
-        if (req.files?.condoImage) {
+        if (req.files?.condoImage?.length > 0) {
             condoData.condoImage = await utils.cloudinaryUpload.upload(req.files?.condoImage?.[0].path)
         }
         await repo.condo.createCondo(condoData)
     }
+    fs.unlink(req.files?.condoImage?.[0].path, (err) => {
+        if (err) {
+            console.error(err)
+            return
+        }
+        console.log("File deleted successfully")
+    })
 
     const roomData = {
-        condoId,
-        price,
-        contract,
+        condoId: condoObj.id,
+        price: +price,
+        contract: +contract,
         roomNumber,
-        roomSize,
-        bedroom,
-        bathroom,
+        roomSize: +roomSize,
+        bedroom: +bedroom,
+        bathroom: +bathroom,
         floor,
         building,
-        isAvailable,
+        isAvailable: !!+isAvailable,
         description,
     }
-    const { id: roomId } = await repo.room.createRoom(roomData)
+    const roomObj = await repo.room.createRoom(roomData)
 
-    // const parsedRoomImages = JSON.parse(req.body.roomImages)
-    // parsedRoomImages.forEach(async (el, index) => {
-    //     let roomImage = ""
-    //     if (el.roomImage) {
-    //         if (typeof el.roomImage === "string") {
-    //             roomImage = el.roomImage
-    //         } else {
-    //             roomImage = await utils.cloudinaryUpload.upload(el.image.path)
-    //             fs.unlink(el.image.path)
-    //         }
+    const parsedRoomImagesList = JSON.parse(req.body.roomImagesList)
+    let roomImageFileCount = 0
+    for (let roomImageObj in parsedRoomImagesList) {
+        let roomImage = ""
+        if (roomImageObj.image === "string") {
+            roomImage = roomImageObj.roomImage
+        } else {
+            roomImage = await utils.cloudinaryUpload.upload(req.files.roomImages?.[roomImageFileCount].path)
+            fs.unlink(req.files.roomImages?.[roomImageFileCount].path, (err) => {
+                if (err) {
+                    console.error(err)
+                    return
+                }
+                console.log("File deleted successfully")
+            })
+            roomImageFileCount++
+        }
 
-    //         await repo.roomImage.createRoomImage({ roomId, roomImage })
-    //     }
-    // })
+        await repo.roomImage.createRoomImage({ roomId: roomObj.id, roomImage })
+    }
 
-    res.status(201).json({ post: { condoId, roomId, ...req.body } })
+    res.status(201).json({ post: { ...req.body } })
 })
