@@ -91,7 +91,7 @@ model Room {
   bathroom    Int
   floor       String
   building    String
-  isAvaliable Boolean @default(true) @map("is_avalible")
+  isAvailable Boolean @default(true) @map("is_available")
   description String? @db.TinyText
 
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
