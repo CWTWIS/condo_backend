@@ -9,7 +9,7 @@ services:
         ports:
             - "3306:3306"
         volumes:
-            - db:/var/lib/postgresql
+            - db:/var/lib/mysql
     # api:
     #   depends_on:
     #     - db
@@ -20,6 +20,5 @@ services:
     #     - "8000:8000"
     #   volumes:
     #     - ./api/src:/api/src
-
-volumes:
-    db:
+# volumes:
+#     db:
