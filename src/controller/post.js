@@ -29,6 +29,8 @@ exports.createPost = catchError(async (req, res, next) => {
     } = req.body
 
     let condoObj = await repo.condo.findCondoByNameTh(nameTh)
+    console.log("condoObj", condoObj)
+
     if (!condoObj) {
         const condoData = {
             nameTh,
@@ -45,7 +47,13 @@ exports.createPost = catchError(async (req, res, next) => {
             condoData.condoImage = await utils.cloudinaryUpload.upload(req.files?.condoImage?.[0].path)
         }
         condoObj = await repo.condo.createCondo(condoData)
+    } else {
+        const existedRoom = await repo.room.findRoomByRoomNumberFloorBuildingCondoId(roomNumber, floor, building, condoObj.id)
+        console.log("roomNumber", roomNumber)
+        console.log("existedRoom", existedRoom)
+        if (existedRoom) throw new CustomError("ROOM_EXISTED", "403_FORBIDDEN", 403)
     }
+
     fs.unlink(req.files?.condoImage?.[0].path, (err) => {
         if (err) {
             console.error(err)
@@ -87,11 +95,13 @@ exports.createPost = catchError(async (req, res, next) => {
     const parsedRoomImagesList = JSON.parse(req.body.roomImagesList)
     let roomImageFileCount = 0
     for (let roomImageObj in parsedRoomImagesList) {
+        console.log("in loop")
         let roomImage = ""
         if (roomImageObj.image === "string") {
             roomImage = roomImageObj.roomImage
         } else {
             roomImage = await utils.cloudinaryUpload.upload(req.files.roomImages?.[roomImageFileCount].path)
+            console.log("roomImageFileCount", roomImageFileCount)
             fs.unlink(req.files.roomImages?.[roomImageFileCount].path, (err) => {
                 if (err) {
                     console.error(err)
@@ -110,5 +120,16 @@ exports.createPost = catchError(async (req, res, next) => {
 
 exports.getPosts = catchError(async (req, res, next) => {
     const posts = await repo.post.getPosts()
+    res.status(200).json({ posts })
+})
+
+exports.getPostByPostId = catchError(async (req, res, next) => {
+    const post = await repo.post.getPostByPostId(+req.params.postId)
+    res.status(200).json({ post })
+})
+
+exports.getPostsByUserId = catchError(async (req, res, next) => {
+    console.log("first")
+    const posts = await repo.post.getPostsByUserId(+req.params.userId)
     res.status(200).json({ posts })
 })
