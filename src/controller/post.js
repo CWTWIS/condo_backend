@@ -5,6 +5,13 @@ const { CustomError } = require("../config/error")
 const { Role } = require("@prisma/client")
 const catchError = require("../utils/catch-error")
 
+exports.checkExistPost = catchError(async (req, res, next) => {
+    const existPost = await repo.post.getPostByPostId(+req.params.postId)
+    if (!existPost) throw new CustomError("POST_NOT_FOUND", "403_FORBIDDEN", 403)
+    req.post = existPost
+    next()
+})
+
 exports.createPost = catchError(async (req, res, next) => {
     // validateRecipe(req.body)
     const {

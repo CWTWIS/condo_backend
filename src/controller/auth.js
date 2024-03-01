@@ -2,6 +2,7 @@ const repo = require("../repository")
 const utils = require("../utils")
 const { CustomError } = require("../config/error")
 const { Role } = require("@prisma/client")
+const catchError = require("../utils/catch-error")
 
 // module.exports.getAll = async (req, res, next) => {
 //     try {
@@ -12,6 +13,14 @@ const { Role } = require("@prisma/client")
 //     }
 //     return
 // }
+
+module.exports.checkExistUser = catchError(async (req, res, next) => {
+    const existUser = await repo.user.getUserByUserId(+req.params.userId)
+    if (!existUser) throw new CustomError("USER_NOT_FOUND", "403_FORBIDDEN", 403)
+    req.user = existUser
+    next()
+})
+
 module.exports.get = async (req, res, next) => {
     try {
         const { id } = req.params
