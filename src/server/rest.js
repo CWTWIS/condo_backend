@@ -11,6 +11,7 @@ const { errorMiddlewares } = require("../middlewares/error")
 const CustomError = require("../config/error")
 const authRoute = require("../router/auth")
 const postRoute = require("../router/post")
+const transactionRoute = require("../router/transaction")
 
 //=====================================================Server Zone
 module.exports = function restApiServer(app) {
@@ -32,7 +33,7 @@ module.exports = function restApiServer(app) {
     })
     app.use("/auth", authRoute)
     app.use("/post", postRoute)
-
+    app.use("/transaction", transactionRoute)
     //=====================================================Throwing Zone
     app.use(notFound)
     app.use(errorMiddlewares)
