@@ -28,7 +28,7 @@ exports.createPost = catchError(async (req, res, next) => {
         description,
     } = req.body
 
-    const condoObj = await repo.condo.findCondoByNameTh(nameTh)
+    let condoObj = await repo.condo.findCondoByNameTh(nameTh)
     if (!condoObj) {
         const condoData = {
             nameTh,
@@ -44,7 +44,7 @@ exports.createPost = catchError(async (req, res, next) => {
         if (req.files?.condoImage?.length > 0) {
             condoData.condoImage = await utils.cloudinaryUpload.upload(req.files?.condoImage?.[0].path)
         }
-        await repo.condo.createCondo(condoData)
+        condoObj = await repo.condo.createCondo(condoData)
     }
     fs.unlink(req.files?.condoImage?.[0].path, (err) => {
         if (err) {
@@ -69,6 +69,21 @@ exports.createPost = catchError(async (req, res, next) => {
     }
     const roomObj = await repo.room.createRoom(roomData)
 
+    const date = new Date()
+    date.toISOString()
+    const postData = {
+        userId: req.user.id,
+        expiresAt: date,
+        roomId: roomObj.id,
+    }
+
+    const postObj = await repo.post.createPost(postData)
+
+    const parsedRoomUtilsList = JSON.parse(req.body.roomUtilsList)
+    await parsedRoomUtilsList.forEach(async (roomUtil) => {
+        await repo.roomUtil.createRoomUtil({ roomId: roomObj.id, utilId: +roomUtil })
+    })
+
     const parsedRoomImagesList = JSON.parse(req.body.roomImagesList)
     let roomImageFileCount = 0
     for (let roomImageObj in parsedRoomImagesList) {
@@ -87,8 +102,13 @@ exports.createPost = catchError(async (req, res, next) => {
             roomImageFileCount++
         }
 
-        await repo.roomImage.createRoomImage({ roomId: roomObj.id, roomImage })
+        const roomImagesObj = await repo.roomImage.createRoomImage({ roomId: roomObj.id, roomImage })
     }
 
     res.status(201).json({ post: { ...req.body } })
+})
+
+exports.getPosts = catchError(async (req, res, next) => {
+    const posts = await repo.post.getPosts()
+    res.status(200).json({ posts })
 })

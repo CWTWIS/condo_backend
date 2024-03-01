@@ -4,111 +4,124 @@ const prisma = new PrismaClient()
 async function seeding() {
     // await prisma.user.create({
     //     data: {
-    //         username: "admin",
-    //         password: "admin1234",
-    //         role: Role.ADMIN,
-    //         firstName: "admin",
-    //         lastName: "cc16",
+    //         username: "john123",
+    //         password: "123456",
+    //         role: "USER",
+    //         firstName: "john",
+    //         lastName: "doe",
+    //         email: "j@mail.com",
+    //         mobile: "0890000000",
     //     },
     // })
-    await prisma.province.createMany({
-        data: [
-            {
-                province: "กรุงเทพมหานคร",
-            },
-        ],
-    })
 
-    await prisma.district.createMany({
+    await prisma.util.createMany({
         data: [
             {
-                district: "พญาไท",
+                name: "garden",
+            },
+            {
+                name: "air-conditioner",
             },
         ],
     })
+    // await prisma.province.createMany({
+    //     data: [
+    //         {
+    //             province: "กรุงเทพมหานคร",
+    //         },
+    //     ],
+    // })
 
-    await prisma.condo.createMany({
-        data: [
-            {
-                nameTh: "59 Heritage Condo",
-                nameEn: "59 Heritage Condo",
-                lat: "13.724464",
-                long: "100.581770",
-                districtId: 1,
-                provinceId: 1,
-                location: "18 ซอย สุขุมวิท 59 แขวงคลองตันเหนือ 10110",
-                postCode: "11111",
-                condoImage: "https://condodee.com/wp-content/uploads/59-Heritage-Sukhumvit-Bangkok-condominium-swimming.jpg",
-            },
-            {
-                nameTh: "พลัมคอนโด รามคำแหง สเตชั่น",
-                nameEn: "พลัมคอนโด รามคำแหง สเตชั่น",
-                lat: "13.7434154",
-                long: "100.6030859",
-                districtId: 1,
-                provinceId: 1,
-                location: "1398 ถนน รามคำแหง แขวงสวนหลวง 10250",
-                postCode: "11111",
-                condoImage: "https://th.zmyhome.com/library/content/878/08-16-2022-12-24-431062264771_Original.jpg",
-            },
-            {
-                nameTh: "เดอะ ลอฟท์ อโศก",
-                nameEn: "เดอะ ลอฟท์ อโศก",
-                lat: "13.7467359",
-                long: "100.5626015",
-                districtId: 1,
-                provinceId: 1,
-                location: "243 ซอย สุขุมวิท 21 แขวงคลองเตยเหนือ 10110",
-                postCode: "11111",
-                condoImage: "https://www.tooktee.com/images/project/3596/1550736335952.jpg",
-            },
-            {
-                nameTh: "หลังสวนวิลล์",
-                nameEn: "หลังสวนวิลล์",
-                lat: "13.739668",
-                long: "100.5427051",
-                districtId: 1,
-                provinceId: 1,
-                location: "50 ซ.หลังสวน แขวงลุมพินี 10330",
-                postCode: "11111",
-                condoImage: "https://www.thaicozy.com/images/property/600x600_4923_467.jpg",
-            },
-            {
-                nameTh: "วิลล่า อโศก คอนโดมิเนียม",
-                nameEn: "วิลล่า อโศก คอนโดมิเนียม",
-                lat: "13.7485389",
-                long: "100.5613557",
-                districtId: 1,
-                provinceId: 1,
-                location: "1588 ถนน เพชรบุรีตัดใหม่ แขวงมักกะสัน 10400",
-                postCode: "11111",
-                condoImage:
-                    "https://herorealtor.com/wp-content/uploads/2019/02/BRE2050_For_Sale_Villa_Asoke_Condo_on_Asoke_Road_and_MRT_Petchburi_in_Bangkok_(2).jpg",
-            },
-            {
-                nameTh: "เดอะ แคปปิตอล คอนโด",
-                nameEn: "เดอะ แคปปิตอล คอนโด",
-                lat: "13.764091",
-                long: "100.5460332",
-                districtId: 1,
-                provinceId: 1,
-                location: "99 ถ. อโศก - ดินแดง แขวงสามเสนใน 10400",
-                postCode: "11111",
-                condoImage: "https://www.livinginsider.com/upload/project/624f0bb8db846_admin_49012.jpeg",
-            },
-            {
-                nameTh: "The Silk Aree 2 Condominium",
-                nameEn: "The Silk Aree 2 Condominium",
-                lat: "13.7794345",
-                long: "100.5411734",
-                districtId: 1,
-                provinceId: 1,
-                location: "ซอย พหลโยธิน 7 (อารีย์ 2) ถนนพหลโยธิน แขวงพญาไท 10400",
-                postCode: "11111",
-                condoImage:
-                    "https://homefinderbangkok.com/wp-content/uploads/2019/07/the-silk-phaholyothin-aree-2-condo-bangkok-58f5f95c6d275e03d6000562_full-770x386.jpg",
-            },
-        ],
-    })
+    // await prisma.district.createMany({
+    //     data: [
+    //         {
+    //             district: "พญาไท",
+    //         },
+    //     ],
+    // })
+
+    // await prisma.condo.createMany({
+    //     data: [
+    //         {
+    //             nameTh: "59 Heritage Condo",
+    //             nameEn: "59 Heritage Condo",
+    //             lat: "13.724464",
+    //             long: "100.581770",
+    //             districtId: 1,
+    //             provinceId: 1,
+    //             location: "18 ซอย สุขุมวิท 59 แขวงคลองตันเหนือ 10110",
+    //             postCode: "11111",
+    //             condoImage: "https://condodee.com/wp-content/uploads/59-Heritage-Sukhumvit-Bangkok-condominium-swimming.jpg",
+    //         },
+    //         {
+    //             nameTh: "พลัมคอนโด รามคำแหง สเตชั่น",
+    //             nameEn: "พลัมคอนโด รามคำแหง สเตชั่น",
+    //             lat: "13.7434154",
+    //             long: "100.6030859",
+    //             districtId: 1,
+    //             provinceId: 1,
+    //             location: "1398 ถนน รามคำแหง แขวงสวนหลวง 10250",
+    //             postCode: "11111",
+    //             condoImage: "https://th.zmyhome.com/library/content/878/08-16-2022-12-24-431062264771_Original.jpg",
+    //         },
+    //         {
+    //             nameTh: "เดอะ ลอฟท์ อโศก",
+    //             nameEn: "เดอะ ลอฟท์ อโศก",
+    //             lat: "13.7467359",
+    //             long: "100.5626015",
+    //             districtId: 1,
+    //             provinceId: 1,
+    //             location: "243 ซอย สุขุมวิท 21 แขวงคลองเตยเหนือ 10110",
+    //             postCode: "11111",
+    //             condoImage: "https://www.tooktee.com/images/project/3596/1550736335952.jpg",
+    //         },
+    //         {
+    //             nameTh: "หลังสวนวิลล์",
+    //             nameEn: "หลังสวนวิลล์",
+    //             lat: "13.739668",
+    //             long: "100.5427051",
+    //             districtId: 1,
+    //             provinceId: 1,
+    //             location: "50 ซ.หลังสวน แขวงลุมพินี 10330",
+    //             postCode: "11111",
+    //             condoImage: "https://www.thaicozy.com/images/property/600x600_4923_467.jpg",
+    //         },
+    //         {
+    //             nameTh: "วิลล่า อโศก คอนโดมิเนียม",
+    //             nameEn: "วิลล่า อโศก คอนโดมิเนียม",
+    //             lat: "13.7485389",
+    //             long: "100.5613557",
+    //             districtId: 1,
+    //             provinceId: 1,
+    //             location: "1588 ถนน เพชรบุรีตัดใหม่ แขวงมักกะสัน 10400",
+    //             postCode: "11111",
+    //             condoImage:
+    //                 "https://herorealtor.com/wp-content/uploads/2019/02/BRE2050_For_Sale_Villa_Asoke_Condo_on_Asoke_Road_and_MRT_Petchburi_in_Bangkok_(2).jpg",
+    //         },
+    //         {
+    //             nameTh: "เดอะ แคปปิตอล คอนโด",
+    //             nameEn: "เดอะ แคปปิตอล คอนโด",
+    //             lat: "13.764091",
+    //             long: "100.5460332",
+    //             districtId: 1,
+    //             provinceId: 1,
+    //             location: "99 ถ. อโศก - ดินแดง แขวงสามเสนใน 10400",
+    //             postCode: "11111",
+    //             condoImage: "https://www.livinginsider.com/upload/project/624f0bb8db846_admin_49012.jpeg",
+    //         },
+    //         {
+    //             nameTh: "The Silk Aree 2 Condominium",
+    //             nameEn: "The Silk Aree 2 Condominium",
+    //             lat: "13.7794345",
+    //             long: "100.5411734",
+    //             districtId: 1,
+    //             provinceId: 1,
+    //             location: "ซอย พหลโยธิน 7 (อารีย์ 2) ถนนพหลโยธิน แขวงพญาไท 10400",
+    //             postCode: "11111",
+    //             condoImage:
+    //                 "https://homefinderbangkok.com/wp-content/uploads/2019/07/the-silk-phaholyothin-aree-2-condo-bangkok-58f5f95c6d275e03d6000562_full-770x386.jpg",
+    //         },
+    //     ],
+    // })
 }
 seeding()
