@@ -8,3 +8,14 @@ module.exports.getPosts = async () =>
     })
 
 // =========================================== CUSTOM REPOSITORY ===================================
+module.exports.getPostByPostId = async (postId) =>
+    await prisma.post.findFirst({
+        where: { id: postId },
+        include: { user: true, room: { include: { condo: true, roomImages: true, roomUtils: { include: { util: true } } } } },
+    })
+
+module.exports.getPostsByUserId = async (userId) =>
+    await prisma.post.findMany({
+        where: { user: { id: +userId } },
+        include: { room: { include: { condo: true, roomImages: true, roomUtils: { include: { util: true } } } } },
+    })

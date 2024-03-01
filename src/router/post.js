@@ -2,6 +2,7 @@ const express = require("express")
 
 const c = require("../controller")
 const authenticate = require("../middlewares/authenticate")
+const checkAgentRole = require("../middlewares/checkAgentRole")
 const validatePost = require("../middlewares/validator/post")
 const postRoute = express.Router()
 const upload = require("../middlewares/upload")
@@ -10,10 +11,13 @@ const upload = require("../middlewares/upload")
 postRoute.post(
     "/",
     authenticate,
+    checkAgentRole,
     upload.fields([{ name: "condoImage", maxCount: 1 }, { name: "roomImages" }]),
     validatePost.validatePostForm,
     c.post.createPost,
 )
 postRoute.get("/", c.post.getPosts)
+postRoute.get("/:postId", c.post.getPostByPostId)
+postRoute.get("/profile/:userId", c.post.getPostsByUserId)
 
 module.exports = postRoute
