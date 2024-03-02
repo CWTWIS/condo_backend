@@ -22,6 +22,12 @@
 | /:id (not complete yet) | PATCH  | authenticate | ---                    | id     | {email, firstName, lastName, mobile }                                        | 200         | {user}                                                         |                                |
 | /:id (not complete yet) | DELETE | authenticate | ---                    | id     | ---                                                                          | 200         | ---                                                            |                                |
 
+### /user
+
+| path             | method | authen? | validate? | params | req.body | status code | res    | remark |
+| ---------------- | ------ | ------- | --------- | ------ | -------- | ----------- | ------ | ------ |
+| /profile/:userId | GET    |         | userId    | userId |          | 200         | {user} |        |
+
 ### /post
 
 | path             | method | authen?                                    | validate?       | params  | req.body                                                                                                                                                                                                                                              | status code | res                                                                   | remark |
