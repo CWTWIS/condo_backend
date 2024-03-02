@@ -13,12 +13,25 @@ exports.chat = async (req, res, next) => {
     return
 }
 
-exports.getChatsByUserId = utils.catchError(async (req, res, next) => {
+exports.getLastChatsByUserId = utils.catchError(async (req, res, next) => {
     const chats = await repo.chat.getLastChatsByUserId(+req.params.userId)
-    res.status(200).json({ chats })
+    const talkerMap = {}
+    const lastChats = chats.reduce((talkerList, chatObj) => {
+        const talkerObj =
+            chatObj.senderId === +req.params.userId
+                ? { talkerId: chatObj.receiverId, talkerName: chatObj.receiver }
+                : { talkerId: chatObj.senderId, talkerName: chatObj.sender }
+        if (!talkerMap[talkerObj.talkerId]) {
+            talkerMap[talkerObj.talkerId] = 1
+            talkerList.push({ talkerObj, message: chatObj.message, id: chatObj.id, createdAt: chatObj.createdAt })
+            console.log("talkerMap", talkerMap)
+        }
+        return talkerList
+    }, [])
+    res.status(200).json({ chats: lastChats })
 })
 
-exports.getChatsByUserIdAndTalkerId = utils.catchError(async (req, res, next) => {
+exports.getChatByUserIdAndTalkerId = utils.catchError(async (req, res, next) => {
     const chats = await repo.chat.getChatByUserIdAndTalkerId(+req.params.userId, +req.params.talkerId)
     res.status(200).json({ chats })
 })
