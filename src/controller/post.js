@@ -3,17 +3,15 @@ const repo = require("../repository")
 const utils = require("../utils")
 const { CustomError } = require("../config/error")
 const { Role } = require("@prisma/client")
-const catchError = require("../utils/catch-error")
 
-exports.checkExistPost = catchError(async (req, res, next) => {
+exports.checkExistPost = utils.catchError(async (req, res, next) => {
     const existPost = await repo.post.getPostByPostId(+req.params.postId)
     if (!existPost) throw new CustomError("POST_NOT_FOUND", "403_FORBIDDEN", 403)
     req.post = existPost
     next()
 })
 
-exports.createPost = catchError(async (req, res, next) => {
-    // validateRecipe(req.body)
+exports.createPost = utils.catchErrorCreatePost(async (req, res, next) => {
     const {
         nameTh,
         nameEn,
@@ -61,14 +59,6 @@ exports.createPost = catchError(async (req, res, next) => {
         if (existedRoom) throw new CustomError("ROOM_EXISTED", "403_FORBIDDEN", 403)
     }
 
-    fs.unlink(req.files?.condoImage?.[0].path, (err) => {
-        if (err) {
-            console.error(err)
-            return
-        }
-        console.log("File deleted successfully")
-    })
-
     const roomData = {
         condoId: condoObj.id,
         price: +price,
@@ -109,13 +99,6 @@ exports.createPost = catchError(async (req, res, next) => {
         } else {
             roomImage = await utils.cloudinaryUpload.upload(req.files.roomImages?.[roomImageFileCount].path)
             console.log("roomImageFileCount", roomImageFileCount)
-            fs.unlink(req.files.roomImages?.[roomImageFileCount].path, (err) => {
-                if (err) {
-                    console.error(err)
-                    return
-                }
-                console.log("File deleted successfully")
-            })
             roomImageFileCount++
         }
 
@@ -125,17 +108,17 @@ exports.createPost = catchError(async (req, res, next) => {
     res.status(201).json({ post: { ...req.body } })
 })
 
-exports.getPosts = catchError(async (req, res, next) => {
+exports.getPosts = utils.catchError(async (req, res, next) => {
     const posts = await repo.post.getPosts()
     res.status(200).json({ posts })
 })
 
-exports.getPostByPostId = catchError(async (req, res, next) => {
+exports.getPostByPostId = utils.catchError(async (req, res, next) => {
     const post = await repo.post.getPostByPostId(+req.params.postId)
     res.status(200).json({ post })
 })
 
-exports.getPostsByUserId = catchError(async (req, res, next) => {
+exports.getPostsByUserId = utils.catchError(async (req, res, next) => {
     console.log("first")
     const posts = await repo.post.getPostsByUserId(+req.params.userId)
     res.status(200).json({ posts })
