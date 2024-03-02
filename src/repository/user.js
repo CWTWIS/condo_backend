@@ -15,3 +15,8 @@ module.exports.findUserNameOrMobileOrEmail = async (data) =>
             OR: [{ email: data.email }, { mobile: data.mobile }, { username: data.username }],
         },
     })
+
+module.exports.getUserByUserId = async (userId) =>
+    await prisma.user.findFirst({
+        where: { id: +userId },
+    })
