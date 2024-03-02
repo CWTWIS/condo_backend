@@ -6,7 +6,7 @@ const chatRoute = express.Router()
 
 //dont forget to validate and authenticate
 chatRoute.get("/", c.chat.chat)
-chatRoute.get("/:userId", c.chat.getChatsByUserId)
-chatRoute.get("/:userId/:talkerId", c.chat.getChatsByUserIdAndTalkerId)
+chatRoute.get("/:userId", c.chat.getLastChatsByUserId)
+chatRoute.get("/:userId/:talkerId", c.chat.getChatByUserIdAndTalkerId)
 
 module.exports = chatRoute
