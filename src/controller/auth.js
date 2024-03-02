@@ -14,7 +14,7 @@ const catchError = require("../utils/catch-error")
 //     return
 // }
 
-module.exports.checkExistUser = catchError(async (req, res, next) => {
+module.exports.checkExistUser = utils.catchError(async (req, res, next) => {
     const existUser = await repo.user.getUserByUserId(+req.params.userId)
     if (!existUser) throw new CustomError("USER_NOT_FOUND", "403_FORBIDDEN", 403)
     req.user = existUser

@@ -2,10 +2,11 @@ const express = require("express")
 
 const c = require("../controller")
 const authenticate = require("../middlewares/authenticate")
-const validateUser = require("../middlewares/validator/auth-user")
-const validateAgent = require("../middlewares/validator/auth-agent")
-const userRoute = express.Router()
+const chatRoute = express.Router()
 
-userRoute.get("/", authenticate, c.chat.chat)
+//dont forget to validate and authenticate
+chatRoute.get("/", c.chat.chat)
+chatRoute.get("/:userId", c.chat.getChatsByUserId)
+chatRoute.get("/:userId/:talkerId", c.chat.getChatsByUserIdAndTalkerId)
 
-module.exports = userRoute
+module.exports = chatRoute

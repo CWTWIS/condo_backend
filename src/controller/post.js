@@ -119,7 +119,7 @@ exports.getPostByPostId = utils.catchError(async (req, res, next) => {
 })
 
 exports.getPostsByUserId = utils.catchError(async (req, res, next) => {
-    console.log("first")
-    const posts = await repo.post.getPostsByUserId(+req.params.userId)
-    res.status(200).json({ posts })
+    const active = await repo.post.getActivePostsByUserId(+req.params.userId)
+    const inactive = await repo.post.getActivePostsByUserId(+req.params.userId)
+    res.status(200).json({ posts: { active, inactive } })
 })

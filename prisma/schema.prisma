@@ -57,8 +57,8 @@ model Chat {
   sender   User @relation(name: "sender", fields: [senderId], references: [id])
   senderId Int  @map("sender_id")
 
-  recevier   User     @relation(name: "receiver", fields: [recevierId], references: [id])
-  recevierId Int      @map("recevier_id")
+  receiver   User     @relation(name: "receiver", fields: [receiverId], references: [id])
+  receiverId Int      @map("receiver_id")
   message    String   @db.VarChar(255)
   createdAt  DateTime @default(now()) @map("created_at") @db.Timestamp(0)
 

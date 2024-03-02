@@ -13,17 +13,16 @@ async function seeding() {
     //         mobile: "0890000000",
     //     },
     // })
-
-    await prisma.util.createMany({
-        data: [
-            {
-                name: "garden",
-            },
-            {
-                name: "air-conditioner",
-            },
-        ],
-    })
+    // await prisma.util.createMany({
+    //     data: [
+    //         {
+    //             name: "garden",
+    //         },
+    //         {
+    //             name: "air-conditioner",
+    //         },
+    //     ],
+    // })
     // await prisma.province.createMany({
     //     data: [
     //         {
@@ -31,7 +30,6 @@ async function seeding() {
     //         },
     //     ],
     // })
-
     // await prisma.district.createMany({
     //     data: [
     //         {
@@ -39,7 +37,6 @@ async function seeding() {
     //         },
     //     ],
     // })
-
     // await prisma.condo.createMany({
     //     data: [
     //         {
@@ -120,6 +117,55 @@ async function seeding() {
     //             postCode: "11111",
     //             condoImage:
     //                 "https://homefinderbangkok.com/wp-content/uploads/2019/07/the-silk-phaholyothin-aree-2-condo-bangkok-58f5f95c6d275e03d6000562_full-770x386.jpg",
+    //         },
+    //     ],
+    // })
+    // await prisma.chat.createMany({
+    //     data: [
+    //     {
+    //         senderId: 1,
+    //         receiverId: 2,
+    //         message: "hey",
+    //     },
+    //     {
+    //         senderId: 1,
+    //         receiverId: 2,
+    //         message: "whatsup",
+    //     },
+    //     {
+    //         senderId: 2,
+    //         receiverId: 1,
+    //         message: "hi",
+    //     },
+    //     {
+    //         senderId: 2,
+    //         receiverId: 1,
+    //         message: "im gooood",
+    //     },
+    //     {
+    //         senderId: 2,
+    //         receiverId: 1,
+    //         message: "wbu",
+    //     },
+    //     {
+    //         senderId: 1,
+    //         receiverId: 2,
+    //         message: "good good",
+    //     },
+    //     {
+    //         senderId: 1,
+    //         receiverId: 2,
+    //         message: "lets meet",
+    //     },
+    //         {
+    //             senderId: 2,
+    //             receiverId: 3,
+    //             message: "boo",
+    //         },
+    //         {
+    //             senderId: 3,
+    //             receiverId: 2,
+    //             message: "what",
     //         },
     //     ],
     // })
