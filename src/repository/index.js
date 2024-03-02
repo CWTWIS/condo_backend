@@ -6,5 +6,6 @@ const repo = {
     room: require("./room"),
     roomImage: require("./roomImage"),
     roomUtil: require("./roomUtil"),
+    chat: require("./chat"),
 }
 module.exports = repo
