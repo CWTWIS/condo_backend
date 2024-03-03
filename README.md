@@ -39,6 +39,13 @@
 | /:postId         | GET    |                                            | validate postId | postId  | ---                                                                                                                                                                                                                                                   | 204         | post {user, room: {condo, roomImages, roomUtils: {util}}}             |        |
 | /profile/:userId | GET    |                                            | validate userId | userId  | ---                                                                                                                                                                                                                                                   | 204         | posts: [ {room: {condo, roomImages, roomUtils: {util}}}]              |        |
 
+### /select
+
+| path       | method | authen? | validate? | params | req.body | status code | res                                                           | remark |
+| ---------- | ------ | ------- | --------- | ------ | -------- | ----------- | ------------------------------------------------------------- | ------ |
+| /districts | GET    | ---     | ---       | ---    | ---      | ---         | {districts: [ {id: 1 , district: "คลองสาน"}, { }, { }, { } ]} |        |
+| /provinces | GET    | ---     | ---       | ---    | ---      | ---         | {provinces: [ {id: 1 , province: "กรุงเทพมหานคร"} ]}          |        |
+
 # From template
 
 ## Description
