@@ -84,28 +84,27 @@ exports.createPost = utils.catchErrorCreatePost(async (req, res, next) => {
 
     const postObj = await repo.post.createPost(postData)
 
-    const parsedRoomUtilsList = JSON.parse(req.body.roomUtilsList)
-    await parsedRoomUtilsList.forEach(async (roomUtil) => {
+    const parsedRoomUtilList = JSON.parse(req.body.roomUtilList)
+    await parsedRoomUtilList.forEach(async (roomUtil) => {
         await repo.roomUtil.createRoomUtil({ roomId: roomObj.id, utilId: +roomUtil })
     })
 
-    const parsedRoomImagesList = JSON.parse(req.body.roomImagesList)
+    const parsedRoomImageList = JSON.parse(req.body.roomImageList)
     let roomImageFileCount = 0
-    for (let roomImageObj in parsedRoomImagesList) {
-        console.log("in loop")
+    for (let roomImageObj in parsedRoomImageList) {
         let roomImage = ""
-        if (roomImageObj.image === "string") {
-            roomImage = roomImageObj.roomImage
+        if (typeof roomImageObj.file === "string") {
+            roomImage = roomImageObj.file
         } else {
             roomImage = await utils.cloudinaryUpload.upload(req.files.roomImages?.[roomImageFileCount].path)
             console.log("roomImageFileCount", roomImageFileCount)
             roomImageFileCount++
         }
 
-        const roomImagesObj = await repo.roomImage.createRoomImage({ roomId: roomObj.id, roomImage })
+        await repo.roomImage.createRoomImage({ roomId: roomObj.id, roomImage })
     }
 
-    res.status(201).json({ post: { ...req.body } })
+    res.status(201).json({ post: { ...req.body, id: postObj.id } })
 })
 
 exports.getPosts = utils.catchError(async (req, res, next) => {
