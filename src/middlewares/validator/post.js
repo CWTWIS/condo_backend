@@ -24,7 +24,7 @@ const schemaPost = Joi.object({
     lat: Joi.string()
         .required()
         .trim()
-        .pattern(/^[0-9]{1,}[.][0-9]{1,}$/)
+        .pattern(/^\d{1,}[.]\d{1,}$/)
         .messages({
             "string.empty": "lat is required",
             "any.required": "lat is required",
@@ -33,7 +33,7 @@ const schemaPost = Joi.object({
     long: Joi.string()
         .required()
         .trim()
-        .pattern(/^[0-9]{1,}[.][0-9]{1,}$/)
+        .pattern(/^\d{1,}[.]\d{1,}$/)
         .messages({
             "string.empty": "long is required",
             "any.required": "long is required",
@@ -58,16 +58,12 @@ const schemaPost = Joi.object({
     postCode: Joi.string()
         .required()
         .trim()
-        .pattern(/^[0-9]{5}$/)
+        .pattern(/^\d{5}$/)
         .messages({
             "string.empty": "postCode is required",
             "any.required": "postCode is required",
             "string.pattern.base": "postCode must contain only 5 numbers",
         }),
-    // condoImage: Joi.required().messages({
-    //     "string.empty": "condoImage is required",
-    //     "any.required": "condoImage is required",
-    // }),
     price: Joi.number().positive().required().messages({
         "string.empty": "price is required",
         "any.required": "price is required",
@@ -116,6 +112,10 @@ const schemaPost = Joi.object({
         "string.empty": "description is required",
         "any.required": "description is required",
     }),
+    // condoImage: Joi.required().messages({
+    //     "string.empty": "condoImage is required",
+    //     "any.required": "condoImage is required",
+    // }),
 }).unknown(true)
 
 exports.validatePostForm = validate(schemaPost)
