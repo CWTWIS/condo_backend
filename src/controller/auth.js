@@ -4,15 +4,9 @@ const { CustomError } = require("../config/error")
 const { Role } = require("@prisma/client")
 const catchError = require("../utils/catch-error")
 
-// module.exports.getAll = async (req, res, next) => {
-//     try {
-//         const users = await repo.user.getAll()
-//         res.status(200).json({ users })
-//     } catch (err) {
-//         next(err)
-//     }
-//     return
-// }
+module.exports.getMe = async (req, res, next) => {
+    res.status(200).json({ user: req.user })
+}
 
 module.exports.checkExistUser = utils.catchError(async (req, res, next) => {
     const existUser = await repo.user.getUserByUserId(+req.params.userId)
