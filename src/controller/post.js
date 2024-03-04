@@ -33,7 +33,7 @@ exports.createPost = utils.catchErrorCreatePost(async (req, res, next) => {
         description,
     } = req.body
 
-    let condoObj = await repo.condo.findCondoByNameTh(nameTh)
+    let condoObj = await repo.condo.findCondoByName(nameTh, nameEn)
     console.log("condoObj", condoObj)
 
     if (!condoObj) {

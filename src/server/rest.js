@@ -13,6 +13,7 @@ const authRoute = require("../router/auth")
 const chatRoute = require("../router/chat")
 const userRoute = require("../router/user")
 const postRoute = require("../router/post")
+const condoRoute = require("../router/condo")
 const selectRoute = require("../router/select")
 const transactionRoute = require("../router/transaction")
 
@@ -38,6 +39,7 @@ module.exports = function restApiServer(app) {
     app.use("/chat", chatRoute)
     app.use("/user", userRoute)
     app.use("/post", postRoute)
+    app.use("/condo", condoRoute)
     app.use("/transaction", transactionRoute)
     app.use("/select", selectRoute)
     //=====================================================Throwing Zone

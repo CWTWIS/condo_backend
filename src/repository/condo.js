@@ -5,7 +5,9 @@ module.exports.createCondo = async (data) => await prisma.condo.create({ data })
 
 // =========================================== CUSTOM REPOSITORY ===================================
 
-module.exports.findCondoByNameTh = async (nameTh) =>
+module.exports.findCondoByName = async (nameTh, nameEn) =>
     await prisma.condo.findFirst({
-        where: { nameTh },
+        where: { OR: [{ nameTh: nameTh }, { nameEn: nameEn }] },
     })
+
+module.exports.getCondos = async () => await prisma.condo.findMany({})
