@@ -4,23 +4,23 @@
 
 ### /auth
 
-| path                    | method | authen?      | validate?              | params | req.body                                                                     | status code | res                                                            | remark                         |
-| ----------------------- | ------ | ------------ | ---------------------- | ------ | ---------------------------------------------------------------------------- | ----------- | -------------------------------------------------------------- | ------------------------------ |
-| /register               | POST   | ---          | validate (joi)         | ---    | {email, password, confirmPassword, firstName, lastName, email, role}         | 200         | {token}                                                        | token = {user}                 |
-|                         |        |              |                        |        |                                                                              | 403         | {message: "EMAIL_IN_USE", ref: "403_FORBIDDEN"}                |                                |
-|                         |        |              |                        |        |                                                                              | 403         | {message: "MOBILE_IN_USE", ref: "403_FORBIDDEN"}               |                                |
-|                         |        |              |                        |        |                                                                              | 403         | {message: "USERNAME_IN_USE", ref: "403_FORBIDDEN"}             |                                |
-| /register/agent         | POST   | ---          | validate (joi)         | ---    | {email, password, confirmPassword, firstName, lastName, email, mobile, role} | 200         | {token}                                                        | token = {user}                 |
-|                         |        |              |                        |        |                                                                              | 403         | {message: "EMAIL_IN_USE", ref: "403_FORBIDDEN"}                |                                |
-|                         |        |              |                        |        |                                                                              | 403         | {message: "MOBILE_IN_USE", ref: "403_FORBIDDEN"}               |                                |
-|                         |        |              |                        |        |                                                                              | 403         | {message: "USERNAME_IN_USE", ref: "403_FORBIDDEN"}             |                                |
-| /login                  | POST   | ---          | validate with database | ---    | { username, password }                                                       | 200         | {token}                                                        | token = {user}                 |
-|                         |        |              |                        |        |                                                                              | 400         | {message: "username or password is wrong", ref: "WRONG_INPUT"} | not found username in database |
-|                         |        |              |                        |        |                                                                              | 400         | {message: "username or password is wrong", ref: "WRONG_INPUT"} | password not match in database |
-| / (not complete yet)    | GET    | authenticate | ---                    | ---    | ---                                                                          | 200         | {users}                                                        | get all users data             |
-| /:id (not complete yet) | GET    | authenticate | ---                    | id     | ---                                                                          | 200         | {user}                                                         | get user data by id            |
-| /:id (not complete yet) | PATCH  | authenticate | ---                    | id     | {email, firstName, lastName, mobile }                                        | 200         | {user}                                                         |                                |
-| /:id (not complete yet) | DELETE | authenticate | ---                    | id     | ---                                                                          | 200         | ---                                                            |                                |
+| path                    | method | authen?      | validate?              | params | req.body                                                                   | status code | res                                                            | remark                         |
+| ----------------------- | ------ | ------------ | ---------------------- | ------ | -------------------------------------------------------------------------- | ----------- | -------------------------------------------------------------- | ------------------------------ |
+| /register               | POST   | ---          | validate (joi)         | ---    | {username, password, confirmPassword, firstName, lastName, email, mobile?} | 200         | {token}                                                        | token = {user}                 |
+|                         |        |              |                        |        |                                                                            | 403         | {message: "EMAIL_IN_USE", ref: "403_FORBIDDEN"}                |                                |
+|                         |        |              |                        |        |                                                                            | 403         | {message: "MOBILE_IN_USE", ref: "403_FORBIDDEN"}               |                                |
+|                         |        |              |                        |        |                                                                            | 403         | {message: "USERNAME_IN_USE", ref: "403_FORBIDDEN"}             |                                |
+| /register/agent         | POST   | ---          | validate (joi)         | ---    | {username, password, confirmPassword, firstName, lastName, email, mobile}  | 200         | {token}                                                        | token = {user}                 |
+|                         |        |              |                        |        |                                                                            | 403         | {message: "EMAIL_IN_USE", ref: "403_FORBIDDEN"}                |                                |
+|                         |        |              |                        |        |                                                                            | 403         | {message: "MOBILE_IN_USE", ref: "403_FORBIDDEN"}               |                                |
+|                         |        |              |                        |        |                                                                            | 403         | {message: "USERNAME_IN_USE", ref: "403_FORBIDDEN"}             |                                |
+| /login                  | POST   | ---          | validate with database | ---    | { username, password }                                                     | 200         | {token}                                                        | token = {user}                 |
+|                         |        |              |                        |        |                                                                            | 400         | {message: "username or password is wrong", ref: "WRONG_INPUT"} | not found username in database |
+|                         |        |              |                        |        |                                                                            | 400         | {message: "username or password is wrong", ref: "WRONG_INPUT"} | password not match in database |
+| / (not complete yet)    | GET    | authenticate | ---                    | ---    | ---                                                                        | 200         | {users}                                                        | get all users data             |
+| /:id (not complete yet) | GET    | authenticate | ---                    | id     | ---                                                                        | 200         | {user}                                                         | get user data by id            |
+| /:id (not complete yet) | PATCH  | authenticate | ---                    | id     | {email, firstName, lastName, mobile }                                      | 200         | {user}                                                         |                                |
+| /:id (not complete yet) | DELETE | authenticate | ---                    | id     | ---                                                                        | 200         | ---                                                            |                                |
 
 ### /user
 
@@ -41,10 +41,11 @@
 
 ### /select
 
-| path       | method | authen? | validate? | params | req.body | status code | res                                                           | remark |
-| ---------- | ------ | ------- | --------- | ------ | -------- | ----------- | ------------------------------------------------------------- | ------ |
-| /districts | GET    | ---     | ---       | ---    | ---      | ---         | {districts: [ {id: 1 , district: "คลองสาน"}, { }, { }, { } ]} |        |
-| /provinces | GET    | ---     | ---       | ---    | ---      | ---         | {provinces: [ {id: 1 , province: "กรุงเทพมหานคร"} ]}          |        |
+| path        | method | authen? | validate? | params | req.body | status code | res                                                           | remark |
+| ----------- | ------ | ------- | --------- | ------ | -------- | ----------- | ------------------------------------------------------------- | ------ |
+| /districts  | GET    | ---     | ---       | ---    | ---      | ---         | {districts: [ {id: 1 , district: "คลองสาน"}, { }, { }, { } ]} |        |
+| /provinces  | GET    | ---     | ---       | ---    | ---      | ---         | {provinces: [ {id: 1 , province: "กรุงเทพมหานคร"} ]}          |        |
+| /facilities | GET    | ---     | ---       | ---    | ---      | ---         | {facilities: [ {id: 1 , name: "Kitchen"}, { }, { }, { } ]}    |        |
 
 ### /map
 
