@@ -11,7 +11,7 @@ module.exports.getPosts = async () =>
 module.exports.getPostByPostId = async (postId) =>
     await prisma.post.findFirst({
         where: { id: postId },
-        include: { user: true, room: { include: { condo: true, roomImages: true, roomUtils: { include: { util: true } } } } },
+        include: { user: true, room: { include: { condo: true, roomImages: true, roomFacilities: { include: { facility: true } } } } },
     })
 
 // module.exports.getPostsByUserId = async (userId) =>
