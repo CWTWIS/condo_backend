@@ -74,9 +74,9 @@ model Post {
   expiresAt  DateTime @map("expires_at")
   postStatus Boolean  @default(false) @map("post_status")
 
-  room         Room?         @relation(fields: [roomId], references: [id])
-  roomId       Int           @unique @map("room_id")
-  transactions Transaction[]
+  room     Room?     @relation(fields: [roomId], references: [id])
+  roomId   Int       @unique @map("room_id")
+  payments Payment[]
 
   @@map("posts")
 }
@@ -97,9 +97,9 @@ model Room {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
 
-  post       Post?
-  roomUtils  RoomUtil[]
-  roomImages RoomImage[]
+  post           Post?
+  roomFacilities RoomFacility[]
+  roomImages     RoomImage[]
 
   condo   Condo @relation(fields: [condoId], references: [id])
   condoId Int   @map("condo_id")
@@ -107,7 +107,7 @@ model Room {
   @@map("rooms")
 }
 
-model Transaction {
+model Payment {
   id        Int     @id @default(autoincrement())
   post      Post    @relation(fields: [postId], references: [id])
   postId    Int     @map("post_id")
@@ -115,7 +115,7 @@ model Transaction {
   amount    Decimal @db.Decimal(10, 2)
   days      Int
 
-  @@map("transactions")
+  @@map("payments")
 }
 
 model Condo {
@@ -152,23 +152,23 @@ model Province {
   @@map("provinces")
 }
 
-model RoomUtil {
+model RoomFacility {
   id Int @id @default(autoincrement())
 
-  room   Room @relation(fields: [roomId], references: [id])
-  roomId Int  @map("room_id")
-  util   Util @relation(fields: [utilId], references: [id])
-  utilId Int  @map("util_id")
+  room       Room     @relation(fields: [roomId], references: [id])
+  roomId     Int      @map("room_id")
+  facility   Facility @relation(fields: [facilityId], references: [id])
+  facilityId Int      @map("facility_id")
 
-  @@map("room_utils")
+  @@map("room_facilities")
 }
 
-model Util {
-  id        Int        @id @default(autoincrement())
-  name      String
-  roomUtils RoomUtil[]
+model Facility {
+  id             Int            @id @default(autoincrement())
+  name           String
+  roomFacilities RoomFacility[]
 
-  @@map("utils")
+  @@map("facilities")
 }
 
 model RoomImage {

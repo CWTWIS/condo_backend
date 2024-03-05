@@ -5,7 +5,7 @@ const repo = {
     condo: require("./condo"),
     room: require("./room"),
     roomImage: require("./roomImage"),
-    roomUtil: require("./roomUtil"),
+    roomFacility: require("./roomFacility"),
     chat: require("./chat"),
     select: require("./select"),
 }

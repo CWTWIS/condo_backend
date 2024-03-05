@@ -84,9 +84,9 @@ exports.createPost = utils.catchErrorCreatePost(async (req, res, next) => {
 
     const postObj = await repo.post.createPost(postData)
 
-    const parsedRoomUtilList = JSON.parse(req.body.roomUtilList)
-    await parsedRoomUtilList.forEach(async (roomUtil) => {
-        await repo.roomUtil.createRoomUtil({ roomId: roomObj.id, utilId: +roomUtil })
+    const parsedRoomFacilityList = JSON.parse(req.body.roomFacilityList)
+    await parsedRoomFacilityList.forEach(async (roomFacility) => {
+        await repo.roomFacility.createRoomFacility({ roomId: roomObj.id, facilityId: +roomFacility })
     })
 
     const parsedRoomImageList = JSON.parse(req.body.roomImageList)
