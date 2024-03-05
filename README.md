@@ -47,6 +47,13 @@
 | /provinces  | GET    | ---     | ---       | ---    | ---      | ---         | {provinces: [ {id: 1 , province: "กรุงเทพมหานคร"} ]}          |        |
 | /facilities | GET    | ---     | ---       | ---    | ---      | ---         | {facilities: [ {id: 1 , name: "Kitchen"}, { }, { }, { } ]}    |        |
 
+### /map
+
+| path   | method | authen? | validate? | params | req.body | status code | res                                                                                                                                  | remark |
+| ------ | ------ | ------- | --------- | ------ | -------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------ |
+| /condo | GET    | ---     | ---       | ---    | ---      | ---         | [{condo: {id, nameTh, nameEn, lat, long location, district:{id, district}, province:{id,province}, condoImage, postCode}}, { }, { }] |        |
+|        |
+
 # From template
 
 ## Description

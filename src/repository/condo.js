@@ -11,3 +11,5 @@ module.exports.findCondoByName = async (nameTh, nameEn) =>
     })
 
 module.exports.getCondos = async () => await prisma.condo.findMany({})
+
+module.exports.getCondosForMap = async () => await prisma.condo.findMany({ include: { province: true, district: true } })
