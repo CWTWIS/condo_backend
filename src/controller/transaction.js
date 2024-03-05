@@ -5,6 +5,7 @@ const stripe = require("stripe")(process.env.STRIPE_KEY)
 const YOUR_DOMAIN = "http://localhost:5173"
 
 module.exports.payment = utils.catchError(async (req, res, next) => {
+    console.log(req.body)
     const session = await stripe.checkout.sessions.create({
         ui_mode: "embedded",
         line_items: [
@@ -13,13 +14,13 @@ module.exports.payment = utils.catchError(async (req, res, next) => {
                 price_data: {
                     currency: "thb",
                     product_data: {
-                        name: "mclaren",
-                        description: "super fast",
+                        name: `Package`,
+                        description: ` ${req.body.days} ${req.body.days == 1 ? "day" : "days"}`,
                         images: ["https://www.siamcar.com/uploads/images/content/2023/05/04-bl3mvl.jpg"],
                     },
-                    unit_amount_decimal: "49000",
+                    unit_amount_decimal: +req.body.total * 100,
                 },
-                quantity: 2,
+                quantity: 1,
             },
         ],
         mode: "payment",
@@ -32,8 +33,8 @@ module.exports.payment = utils.catchError(async (req, res, next) => {
 module.exports.getstatus = utils.catchError(async (req, res, next) => {
     const session = await stripe.checkout.sessions.retrieve(req.query.session_id)
 
-    if(session.status == "complete") {
-    // create transaction
+    if (session.status == "complete") {
+        // create transaction
     }
     res.status(200).send({
         status: session.status,
