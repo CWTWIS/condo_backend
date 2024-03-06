@@ -123,3 +123,11 @@ exports.getPostsByUserId = utils.catchError(async (req, res, next) => {
     const inactive = await repo.post.getInactivePostsByUserId(+req.params.userId)
     res.status(200).json({ posts: { active, inactive } })
 })
+
+exports.editPostById = utils.catchError(async (req, res, next) => {
+    const days = req.body.days
+    const newExpiresAt = new Date()
+    newExpiresAt.setDate(newExpiresAt.getDate() + days)
+    const post = await repo.post.editPostById(newExpiresAt, +req.body.postId)
+    res.status(200).json({ post })
+})
