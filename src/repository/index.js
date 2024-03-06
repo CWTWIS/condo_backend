@@ -8,5 +8,6 @@ const repo = {
     roomFacility: require("./roomFacility"),
     chat: require("./chat"),
     select: require("./select"),
+    payment: require("./payment"),
 }
 module.exports = repo
