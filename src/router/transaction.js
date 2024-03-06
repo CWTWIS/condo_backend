@@ -4,6 +4,6 @@ const c = require("../controller")
 const transactionRoute = express.Router()
 
 transactionRoute.post("/create-checkout-session", c.transaction.payment)
-transactionRoute.get("/session-status", c.transaction.getstatus)
+transactionRoute.post("/session-status", c.transaction.getStatus)
 
 module.exports = transactionRoute

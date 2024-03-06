@@ -1,4 +1,5 @@
 const { CustomError } = require("../config/error")
+const repo = require("../repository")
 const utils = require("../utils")
 const stripe = require("stripe")(process.env.STRIPE_KEY)
 
@@ -10,7 +11,6 @@ module.exports.payment = utils.catchError(async (req, res, next) => {
         ui_mode: "embedded",
         line_items: [
             {
-                // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
                 price_data: {
                     currency: "thb",
                     product_data: {
@@ -18,26 +18,39 @@ module.exports.payment = utils.catchError(async (req, res, next) => {
                         description: ` ${req.body.days} ${req.body.days == 1 ? "day" : "days"}`,
                         images: ["https://www.siamcar.com/uploads/images/content/2023/05/04-bl3mvl.jpg"],
                     },
-                    unit_amount_decimal: +req.body.total * 100,
+                    unit_amount_decimal: +req.body.amount * 100,
                 },
                 quantity: 1,
             },
         ],
         mode: "payment",
-        return_url: `${YOUR_DOMAIN}/return?session_id={CHECKOUT_SESSION_ID}`,
+        return_url: `${YOUR_DOMAIN}/return?session_id={CHECKOUT_SESSION_ID}&postId=${req.body.postId}&days=${req.body.days}&amount=${req.body.amount}`,
     })
 
     res.status(201).send({ clientSecret: session.client_secret })
 })
 
-module.exports.getstatus = utils.catchError(async (req, res, next) => {
+module.exports.getStatus = utils.catchError(async (req, res, next) => {
+    console.log(req.body)
     const session = await stripe.checkout.sessions.retrieve(req.query.session_id)
+    let paymentIntentId = null
+    if (session.payment_intent) {
+        const paymentIntent = await stripe.paymentIntents.retrieve(session.payment_intent)
+        paymentIntentId = paymentIntent.id
+        // console.log(paymentIntentId)
+    }
 
     if (session.status == "complete") {
         // create transaction
+        const payment = await repo.payment.createPayments({ ...req.body, paymentId: paymentIntentId })
+        console.log(payment)
+        const updatePostStatus = await repo.post.editPostById(req.body.days, req.body.postId)
+        console.log(updatePostStatus)
+        // const
     }
     res.status(200).send({
         status: session.status,
         customer_email: session.customer_details.email,
+        paymentId: paymentIntentId,
     })
 })

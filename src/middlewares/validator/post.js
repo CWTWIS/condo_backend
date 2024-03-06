@@ -24,7 +24,7 @@ const schemaPost = Joi.object({
     lat: Joi.string()
         .required()
         .trim()
-        .pattern(/^\d{1,}[.]\d{1,}$/)
+        .pattern(/^[0-9.]{1,}$/)
         .messages({
             "string.empty": "lat is required",
             "any.required": "lat is required",
@@ -33,7 +33,7 @@ const schemaPost = Joi.object({
     long: Joi.string()
         .required()
         .trim()
-        .pattern(/^\d{1,}[.]\d{1,}$/)
+        .pattern(/^[0-9.]{1,}$/)
         .messages({
             "string.empty": "long is required",
             "any.required": "long is required",
