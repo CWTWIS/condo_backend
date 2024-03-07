@@ -2,11 +2,11 @@ const prisma = require("../config/prisma")
 
 // =========================================== BASIC CRUD ===================================
 module.exports.createRoom = async (data) => await prisma.room.create({ data })
+module.exports.updateRoom = async (data, roomId) => await prisma.room.update({ where: { id: roomId }, data })
 
 // =========================================== CUSTOM REPOSITORY ===================================
 
 module.exports.findRoomByRoomNumberFloorBuildingCondoId = async (roomNumber, floor, building, condoId) => {
-    console.log("roomNumber", roomNumber)
     return await prisma.room.findFirst({
         where: { roomNumber, floor, building, condoId },
     })

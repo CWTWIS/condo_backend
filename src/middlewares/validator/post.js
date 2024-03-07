@@ -104,7 +104,7 @@ const schemaPost = Joi.object({
         "string.empty": "building is required",
         "any.required": "building is required",
     }),
-    isAvailable: Joi.boolean().required().messages({
+    isAvailable: Joi.required().messages({
         "string.empty": "isAvailable is required",
         "any.required": "isAvailable is required",
     }),
