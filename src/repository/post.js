@@ -37,3 +37,17 @@ module.exports.editPostById = async (days, postId) => {
     newExpiresAt.setDate(newExpiresAt.getDate() + days)
     await prisma.post.update({ where: { id: postId }, data: { expiresAt: newExpiresAt, postStatus: true } })
 }
+
+module.exports.getPostInCondo = async (condoId) =>
+    await prisma.post.findMany({
+        where: { postStatus: true, room: { condoId } },
+        include: {
+            room: {
+                include: {
+                    condo: { include: { district: true, province: true } },
+                    roomFacilities: { include: { facility: true } },
+                    roomImages: true,
+                },
+            },
+        },
+    })

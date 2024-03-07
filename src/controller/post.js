@@ -131,3 +131,9 @@ exports.editPostById = utils.catchError(async (req, res, next) => {
     const post = await repo.post.editPostById(newExpiresAt, +req.body.postId)
     res.status(200).json({ post })
 })
+
+exports.getPostInCondo = utils.catchError(async (req, res, next) => {
+    const id = +req.params.condoId
+    const posts = await repo.post.getPostInCondo(id)
+    res.status(200).json({ posts })
+})
