@@ -37,7 +37,6 @@ module.exports.editPostStatusAndDateById = async (days, postId) => {
     newExpiresAt.setDate(newExpiresAt.getDate() + days)
     await prisma.post.update({ where: { id: postId }, data: { expiresAt: newExpiresAt, postStatus: true } })
 }
-<<<<<<< HEAD
 
 module.exports.getPostInCondo = async (condoId) =>
     await prisma.post.findMany({
@@ -52,8 +51,6 @@ module.exports.getPostInCondo = async (condoId) =>
             },
         },
     })
-=======
 module.exports.editPostById = async (postId, editedData) => {
     await prisma.update({ where: { id: postId }, data: { editedData } })
 }
->>>>>>> develop
