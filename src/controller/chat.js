@@ -33,5 +33,7 @@ exports.getLastChatsByUserId = utils.catchError(async (req, res, next) => {
 
 exports.getChatByUserIdAndTalkerId = utils.catchError(async (req, res, next) => {
     const chats = await repo.chat.getChatByUserIdAndTalkerId(+req.params.userId, +req.params.talkerId)
+    console.log("in g")
+    console.log("chats", chats)
     res.status(200).json({ chats })
 })
