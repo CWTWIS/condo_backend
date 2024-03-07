@@ -44,7 +44,7 @@ module.exports.getStatus = utils.catchError(async (req, res, next) => {
         // create transaction
         const payment = await repo.payment.createPayments({ ...req.body, paymentId: paymentIntentId })
         console.log(payment)
-        const updatePostStatus = await repo.post.editPostById(req.body.days, req.body.postId)
+        const updatePostStatus = await repo.post.editPostStatusAndDateById(req.body.days, req.body.postId)
         console.log(updatePostStatus)
         // const
     }

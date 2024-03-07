@@ -32,8 +32,11 @@ module.exports.getInactivePostsByUserId = async (userId) =>
         include: { room: { include: { condo: true } } },
     })
 
-module.exports.editPostById = async (days, postId) => {
+module.exports.editPostStatusAndDateById = async (days, postId) => {
     const newExpiresAt = new Date()
     newExpiresAt.setDate(newExpiresAt.getDate() + days)
     await prisma.post.update({ where: { id: postId }, data: { expiresAt: newExpiresAt, postStatus: true } })
+}
+module.exports.editPostById = async (postId, editedData) => {
+    await prisma.update({ where: { id: postId }, data: { editedData } })
 }
