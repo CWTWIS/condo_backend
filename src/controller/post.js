@@ -124,12 +124,67 @@ exports.getPostsByUserId = utils.catchError(async (req, res, next) => {
     res.status(200).json({ posts: { active, inactive } })
 })
 
+// exports.editPostStatusAndDateById = utils.catchError(async (req, res, next) => {
+//     const days = req.body.days
+//     const newExpiresAt = new Date()
+//     newExpiresAt.setDate(newExpiresAt.getDate() + days)
+//     const post = await repo.post.editPostById(newExpiresAt, +req.body.postId)
+//     res.status(200).json({ post })
+// })
+
 exports.editPostById = utils.catchError(async (req, res, next) => {
-    const days = req.body.days
-    const newExpiresAt = new Date()
-    newExpiresAt.setDate(newExpiresAt.getDate() + days)
-    const post = await repo.post.editPostById(newExpiresAt, +req.body.postId)
-    res.status(200).json({ post })
+    const {
+        nameTh,
+        nameEn,
+        lat,
+        long,
+        location,
+        districtId,
+        provinceId,
+        postCode,
+        price,
+        contract,
+        roomNumber,
+        roomSize,
+        bedroom,
+        bathroom,
+        floor,
+        building,
+        isAvailable,
+        description,
+    } = req.body
+    // ---------condo-------------
+    // change condo??? แปลกๆหรือมันคือกรณีกรอกข้อมูลคอนโดผิด + รูป
+    const condoEditedData = {
+        nameTh,
+        nameEn,
+        lat,
+        long,
+        location,
+        districtId: +districtId,
+        provinceId: +provinceId,
+        postCode,
+    }
+
+    // ---------room--------------
+    // room แก้ได้
+    const roomEditedData = {
+        condoId: condoObj.id,
+        price: +price,
+        contract: +contract,
+        roomNumber,
+        roomSize: +roomSize,
+        bedroom: +bedroom,
+        bathroom: +bathroom,
+        floor,
+        building,
+        isAvailable: !!+isAvailable,
+        description,
+    }
+
+    // ----------post-------------
+    // น่าจะ update แต่ updated at เพราะ userId cratedAt expriedAt postStatus RoomId ไม่เปลี่ยน
+    // const editedPost = await repo.post.editPostById(+req.params.postId, editedData)
 })
 
 exports.getPostInCondo = utils.catchError(async (req, res, next) => {

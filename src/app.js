@@ -22,10 +22,6 @@ restApiServer(app)
 // module.exports = server
 
 //=====================================================Listening Zone
-// console.log(`API DOCS ON:  http://${host}:${port}/docs`)
-// server.listen(+port, host, () => {
-//     console.log(`Server is running at http://${host}:${port}`)
-// })
 
 const { Server } = require("socket.io")
 
@@ -36,7 +32,6 @@ const io = new Server(server, {
         methods: ["GET", "POST"],
     },
 })
-const { addUser, removeUser, getUser, getUsersInRoom } = require("./controller/userTest")
 
 // const onlineUser = {};
 
