@@ -2,6 +2,9 @@ const prisma = require("../config/prisma")
 
 // =========================================== BASIC CRUD ===================================
 module.exports.createPost = async (data) => await prisma.post.create({ data })
+
+module.exports.updatePost = async (data, postId) => await prisma.post.update({ where: { id: +postId }, data })
+
 module.exports.getPosts = async () =>
     await prisma.post.findMany({
         include: { room: { include: { condo: true } } },
