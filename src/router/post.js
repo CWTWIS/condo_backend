@@ -21,7 +21,12 @@ postRoute.post(
 postRoute.get("/", c.post.getPosts)
 postRoute.get("/:postId", validatePostId, c.post.checkExistPost, c.post.getPostByPostId)
 postRoute.get("/profile/:userId", validateUserId, c.auth.checkExistUser, c.post.getPostsByUserId)
+<<<<<<< HEAD
+postRoute.patch("/", c.post.editPostById)
+postRoute.get("/condo/:condoId", c.post.getPostInCondo)
+=======
 // postRoute.patch("/", c.post.editPostStatusAndDateById)
 postRoute.patch("/:postId", validatePostId, c.post.checkExistPost)
+>>>>>>> develop
 
 module.exports = postRoute
