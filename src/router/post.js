@@ -18,6 +18,14 @@ postRoute.post(
     validatePost.validatePostForm,
     c.post.createPost,
 )
+postRoute.patch(
+    "/:postId/condo/:condoId/room/:roomId",
+    authenticate,
+    checkAgentRole,
+    upload.fields([{ name: "condoImage", maxCount: 1 }, { name: "roomImages" }]),
+    validatePost.validatePostForm,
+    c.post.editPost,
+)
 postRoute.get("/", c.post.getPosts)
 postRoute.get("/:postId", validatePostId, c.post.checkExistPost, c.post.getPostByPostId)
 postRoute.get("/profile/:userId", validateUserId, c.auth.checkExistUser, c.post.getPostsByUserId)

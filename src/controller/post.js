@@ -31,6 +31,7 @@ exports.createPost = utils.catchErrorCreatePost(async (req, res, next) => {
         building,
         isAvailable,
         description,
+        condoImage,
     } = req.body
 
     let condoObj = await repo.condo.findCondoByName(nameTh, nameEn)
@@ -54,8 +55,6 @@ exports.createPost = utils.catchErrorCreatePost(async (req, res, next) => {
         condoObj = await repo.condo.createCondo(condoData)
     } else {
         const existedRoom = await repo.room.findRoomByRoomNumberFloorBuildingCondoId(roomNumber, floor, building, condoObj.id)
-        console.log("roomNumber", roomNumber)
-        console.log("existedRoom", existedRoom)
         if (existedRoom) throw new CustomError("ROOM_EXISTED", "403_FORBIDDEN", 403)
     }
 
@@ -91,11 +90,12 @@ exports.createPost = utils.catchErrorCreatePost(async (req, res, next) => {
 
     const parsedRoomImageList = JSON.parse(req.body.roomImageList)
     let roomImageFileCount = 0
-    for (let roomImageObj in parsedRoomImageList) {
+    for (let roomImageObj of parsedRoomImageList) {
         let roomImage = ""
-        if (typeof roomImageObj.file === "string") {
+        if (typeof roomImageObj.file === "string" && roomImageObj.file !== "") {
             roomImage = roomImageObj.file
         } else {
+            console.log("in create")
             roomImage = await utils.cloudinaryUpload.upload(req.files.roomImages?.[roomImageFileCount].path)
             console.log("roomImageFileCount", roomImageFileCount)
             roomImageFileCount++
@@ -105,6 +105,102 @@ exports.createPost = utils.catchErrorCreatePost(async (req, res, next) => {
     }
 
     res.status(201).json({ post: { ...req.body, id: postObj.id } })
+})
+
+exports.editPost = utils.catchErrorCreatePost(async (req, res, next) => {
+    const {
+        nameTh,
+        nameEn,
+        lat,
+        long,
+        location,
+        districtId,
+        provinceId,
+        postCode,
+        price,
+        contract,
+        roomNumber,
+        roomSize,
+        bedroom,
+        bathroom,
+        floor,
+        building,
+        isAvailable,
+        description,
+        condoImage,
+    } = req.body
+
+    let condoObj = await repo.condo.findCondoByName(nameTh, nameEn)
+    console.log("condoObj", condoObj)
+
+    if (!condoObj) {
+        const condoData = {
+            nameTh,
+            nameEn,
+            lat,
+            long,
+            location,
+            districtId: +districtId,
+            provinceId: +provinceId,
+            postCode,
+        }
+
+        if (req.files?.condoImage?.length > 0) {
+            condoData.condoImage = await utils.cloudinaryUpload.upload(req.files?.condoImage?.[0].path)
+        } else if (typeof condoImage === "string" && condoImage !== "") {
+            condoData.condoImage = condoImage
+        }
+        condoObj = await repo.condo.createCondo(condoData)
+    } else {
+        const existedRoom = await repo.room.findRoomByRoomNumberFloorBuildingCondoId(roomNumber, floor, building, condoObj.id)
+        if (existedRoom) throw new CustomError("ROOM_EXISTED", "403_FORBIDDEN", 403)
+    }
+
+    const roomData = {
+        condoId: condoObj.id,
+        price: +price,
+        contract: +contract,
+        roomNumber,
+        roomSize: +roomSize,
+        bedroom: +bedroom,
+        bathroom: +bathroom,
+        floor,
+        building,
+        isAvailable: !!+isAvailable,
+        description,
+    }
+    const roomObj = await repo.room.updateRoom(roomData, +req.params.roomId)
+
+    const date = new Date()
+    date.toISOString()
+    const postData = {
+        expiresAt: date,
+    }
+
+    const postObj = await repo.post.updatePost(postData, +req.params.postId)
+
+    await repo.roomFacility.deleteRoomFacility(roomObj.id)
+    const parsedRoomFacilityList = JSON.parse(req.body.roomFacilityList)
+    await parsedRoomFacilityList.forEach(async (roomFacility) => {
+        await repo.roomFacility.createRoomFacility({ roomId: roomObj.id, facilityId: +roomFacility })
+    })
+
+    await repo.roomImage.deleteRoomImage(roomObj.id)
+    const parsedRoomImageList = JSON.parse(req.body.roomImageList)
+    let roomImageFileCount = 0
+    for (let roomImageObj of parsedRoomImageList) {
+        let roomImage = ""
+        if (typeof roomImageObj.file === "string" && roomImageObj.file !== "") {
+            roomImage = roomImageObj.file
+        } else {
+            roomImage = await utils.cloudinaryUpload.upload(req.files.roomImages?.[roomImageFileCount].path)
+            roomImageFileCount++
+        }
+
+        await repo.roomImage.createRoomImage({ roomId: roomObj.id, roomImage })
+    }
+
+    res.status(200).json({ post: { ...req.body, id: postObj.id } })
 })
 
 exports.getPosts = utils.catchError(async (req, res, next) => {
