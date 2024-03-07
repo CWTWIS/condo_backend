@@ -41,12 +41,16 @@ module.exports.getStatus = utils.catchError(async (req, res, next) => {
     }
 
     if (session.status == "complete") {
-        // create transaction
-        const payment = await repo.payment.createPayments({ ...req.body, paymentId: paymentIntentId })
-        console.log(payment)
-        const updatePostStatus = await repo.post.editPostStatusAndDateById(req.body.days, req.body.postId)
-        console.log(updatePostStatus)
-        // const
+        // check if paymentId already created to database
+        const existingPaymentId = await repo.payment.getPaymentByPaymentId(paymentIntentId)
+
+        // create transaction if paymentId is not existed
+        if (!existingPaymentId) {
+            const payment = await repo.payment.createPayments({ ...req.body, paymentId: paymentIntentId })
+            console.log(payment)
+            const updatePostStatus = await repo.post.editPostStatusAndDateById(req.body.days, req.body.postId)
+            console.log(updatePostStatus)
+        }
     }
     res.status(200).send({
         status: session.status,
