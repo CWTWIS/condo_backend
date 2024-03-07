@@ -16,6 +16,7 @@ const postRoute = require("../router/post")
 const condoRoute = require("../router/condo")
 const selectRoute = require("../router/select")
 const transactionRoute = require("../router/transaction")
+const chatTestRoute = require("../router/chatTest")
 
 //=====================================================Server Zone
 module.exports = function restApiServer(app) {
@@ -35,6 +36,7 @@ module.exports = function restApiServer(app) {
             next(new CustomError("Ping Error", "NotFoundData", 500))
         }
     })
+    app.use(chatTestRoute)
     app.use("/auth", authRoute)
     app.use("/chat", chatRoute)
     app.use("/user", userRoute)
