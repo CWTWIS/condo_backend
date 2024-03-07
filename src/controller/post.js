@@ -282,3 +282,9 @@ exports.editPostById = utils.catchError(async (req, res, next) => {
     // น่าจะ update แต่ updated at เพราะ userId cratedAt expriedAt postStatus RoomId ไม่เปลี่ยน
     // const editedPost = await repo.post.editPostById(+req.params.postId, editedData)
 })
+
+exports.getPostInCondo = utils.catchError(async (req, res, next) => {
+    const id = +req.params.condoId
+    const posts = await repo.post.getPostInCondo(id)
+    res.status(200).json({ posts })
+})
