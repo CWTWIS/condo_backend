@@ -8,7 +8,7 @@ module.exports.createChat = async (data) => await prisma.chat.create({ data })
 module.exports.getLastChatsByUserId = async (userId) =>
     await prisma.chat.findMany({
         orderBy: { id: "desc" },
-        where: { OR: [{ senderId: +userId }, { receiverId: +userId }] },
+        where: { OR: [{ senderId: +userId }, { AND: [{ receiverId: +userId }, { message: { not: " " } }] }] },
         distinct: ["senderId", "receiverId"],
         include: {
             receiver: { select: { id: true, firstName: true, lastName: true } },
