@@ -1,5 +1,34 @@
 const prisma = require("../config/prisma")
 
+// =================== CRON JOB: check if expired ================
+var cron = require("node-cron")
+
+const isPostExpired = (post) => {
+    const currentDate = new Date()
+    const expiresAtDate = new Date(post.expiresAt)
+    return currentDate > expiresAtDate
+}
+
+const updatePostStatusIfExpired = async (postId) => {
+    const post = await prisma.post.findUnique({ where: { id: postId } })
+    if (post && isPostExpired(post)) {
+        await prisma.post.update({
+            where: { id: postId },
+            data: { postStatus: false },
+        })
+        console.log(`Post ${postId} status is expired.`)
+    }
+}
+
+cron.schedule("0 0 * * *", async () => {
+    console.log("Running task to update post statuses at 12:00AM...")
+    const allPosts = await prisma.post.findMany()
+    for (const post of allPosts) {
+        await updatePostStatusIfExpired(post.id)
+    }
+    console.log("Task completed.")
+})
+
 // =========================================== BASIC CRUD ===================================
 module.exports.createPost = async (data) => await prisma.post.create({ data })
 
