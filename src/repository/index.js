@@ -9,5 +9,6 @@ const repo = {
     chat: require("./chat"),
     select: require("./select"),
     payment: require("./payment"),
+    review: require("./review"),
 }
 module.exports = repo

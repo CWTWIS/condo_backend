@@ -6,5 +6,6 @@ const controller = {
     condo: require("./condo"),
     transaction: require("./transaction"),
     select: require("./select"),
+    review: require("./review"),
 }
 module.exports = controller
