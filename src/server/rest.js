@@ -17,6 +17,7 @@ const condoRoute = require("../router/condo")
 const selectRoute = require("../router/select")
 const transactionRoute = require("../router/transaction")
 const chatTestRoute = require("../router/chatTest")
+const reviewRoute = require("../router/review")
 
 //=====================================================Server Zone
 module.exports = function restApiServer(app) {
@@ -44,6 +45,7 @@ module.exports = function restApiServer(app) {
     app.use("/condo", condoRoute)
     app.use("/transaction", transactionRoute)
     app.use("/select", selectRoute)
+    app.use("/review", reviewRoute)
     //=====================================================Throwing Zone
     app.use(notFound)
     app.use(errorMiddlewares)
