@@ -56,12 +56,12 @@
 
 ### /review
 
-| path     | method | authen?      | validate?                  | params | req.body          | status code | res                                                  | remark |
-| -------- | ------ | ------------ | -------------------------- | ------ | ----------------- | ----------- | ---------------------------------------------------- | ------ |
-| /:userId | POST   | authenticate | validate (rating, comment) | userId | {rating, comment} | 201         | {review: {id, userId,rating,comment}}                |        |
-| /        | GET    | ---          | ---                        | ---    | ---               | 200         | {reviews: [{id, userId,rating,comment}, {}, {}, {}]} |        |
-| /:userId | GET    | authenticate | ---                        | userId | ---               | 200         | {review: {id, userId,rating,comment}}                |        |
-| /:userId | PATCH  | authenticate | validate (rating, comment) | userId | {rating, comment} | 200         | {review: {id, userId,rating,comment}}                |        |
+| path | method | authen?      | validate?                  | params | req.body          | status code | res                                                                               | remark |
+| ---- | ------ | ------------ | -------------------------- | ------ | ----------------- | ----------- | --------------------------------------------------------------------------------- | ------ |
+| /    | POST   | authenticate | validate (rating, comment) | userId | {rating, comment} | 201         | {review: {id, userId,rating,comment}}                                             |        |
+| /    | GET    | ---          | ---                        | ---    | ---               | 200         | {reviews: [{id, userId,rating,comment, user: {firstName, lastName}}, {}, {}, {}]} | desc   |
+| /me  | GET    | authenticate | ---                        | userId | ---               | 200         | {review: {id, userId,rating,comment}}                                             |        |
+| /    | PATCH  | authenticate | validate (rating, comment) | userId | {rating, comment} | 200         | {review: {id, userId,rating,comment}}                                             |        |
 
 # From template
 
