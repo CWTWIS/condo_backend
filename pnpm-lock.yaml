@@ -41,6 +41,9 @@ dependencies:
   node-cron:
     specifier: ^3.0.3
     version: 3.0.3
+  nodemailer:
+    specifier: ^6.9.12
+    version: 6.9.12
   path:
     specifier: ^0.12.7
     version: 0.12.7
@@ -1174,6 +1177,11 @@ packages:
     engines: {node: '>=6.0.0'}
     dependencies:
       uuid: 8.3.2
+    dev: false
+
+  /nodemailer@6.9.12:
+    resolution: {integrity: sha512-pnLo7g37Br3jXbF0bl5DekBJihm2q+3bB3l2o/B060sWmb5l+VqeScAQCBqaQ+5ezRZFzW5SciZNGdRDEbq89w==}
+    engines: {node: '>=6.0.0'}
     dev: false
 
   /object-assign@4.1.1:
