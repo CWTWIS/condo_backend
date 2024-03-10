@@ -27,6 +27,7 @@ postRoute.patch(
     c.post.editPost,
 )
 postRoute.get("/", c.post.getPosts)
+postRoute.get("/active", c.post.getActivePosts)
 postRoute.get("/:postId", validatePostId, c.post.checkExistPost, c.post.getPostByPostId)
 postRoute.get("/profile/:userId", validateUserId, c.auth.checkExistUser, c.post.getPostsByUserId)
 postRoute.patch("/", c.post.editPostById)
