@@ -151,9 +151,6 @@ exports.editPost = utils.catchErrorCreatePost(async (req, res, next) => {
             condoData.condoImage = condoImage
         }
         condoObj = await repo.condo.createCondo(condoData)
-    } else {
-        const existedRoom = await repo.room.findRoomByRoomNumberFloorBuildingCondoId(roomNumber, floor, building, condoObj.id)
-        if (existedRoom) throw new CustomError("ROOM_EXISTED", "403_FORBIDDEN", 403)
     }
 
     const roomData = {
