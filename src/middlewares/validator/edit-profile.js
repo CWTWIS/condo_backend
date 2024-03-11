@@ -30,6 +30,14 @@ const schemaUpdateProfile = Joi.object({
             "string.pattern.base": "Invalid mobile format",
         })
         .optional(),
+    firstName: Joi.string().required().trim().messages({
+        "string.empty": "First name is required",
+        "any.required": "First name is required",
+    }),
+    lastName: Joi.string().required().trim().messages({
+        "string.empty": "Last name is required",
+        "any.required": "Last name is required",
+    }),
 })
 
 exports.editProfile = validate(schemaUpdateProfile)
