@@ -39,6 +39,9 @@ async function sendInvoiceEmail(email, paymentId, days, totalAmount) {
 
 module.exports.payment = utils.catchError(async (req, res, next) => {
     console.log(req.body)
+    const days = req.body.days
+    const amount = req.body.amount
+
     const session = await stripe.checkout.sessions.create({
         ui_mode: "embedded",
         line_items: [
@@ -46,9 +49,11 @@ module.exports.payment = utils.catchError(async (req, res, next) => {
                 price_data: {
                     currency: "thb",
                     product_data: {
-                        name: `Package`,
-                        description: ` ${req.body.days} ${req.body.days == 1 ? "day" : "days"}`,
-                        images: ["https://www.siamcar.com/uploads/images/content/2023/05/04-bl3mvl.jpg"],
+                        name: `Package ${req.body.days} ${req.body.days == 1 ? "day" : "days"}`,
+                        // description: ` ${req.body.days} ${req.body.days == 1 ? "day" : "days"}`,
+                        images: [
+                            "https://media.istockphoto.com/id/1388603346/vector/city-buildings-facades-illustration.jpg?s=612x612&w=0&k=20&c=mB1uEIdzAOO32MFRbJ4ciuioyj0mQOv21XPA-ygghYE=",
+                        ],
                     },
                     unit_amount_decimal: +req.body.amount * 100,
                 },
