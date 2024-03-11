@@ -39,7 +39,7 @@ module.exports.login = utils.catchError(async (req, res, next) => {
     // DELETE KEY of password from user data
     delete user.password
     // SIGN token from user data
-    const token = utils.jwt.sign(user)
+    const token = utils.jwt.sign({ id: user.id, role: user.role })
     res.status(200).json({ token, user })
 })
 
@@ -63,7 +63,7 @@ module.exports.register = utils.catchError(async (req, res, next) => {
     delete user.password
     // SIGN token from user data
 
-    const token = utils.jwt.sign(user)
+    const token = utils.jwt.sign({ id: user.id, role: user.role })
 
     res.status(200).json({ token, user })
 })
@@ -89,30 +89,30 @@ module.exports.registerAgent = utils.catchError(async (req, res, next) => {
 
     delete agent.password
 
-    const token = utils.jwt.sign(agent)
+    const token = utils.jwt.sign({ id: agent.id, role: agent.role })
 
     res.status(200).json({ token, agent })
 })
 
-module.exports.update = async (req, res, next) => {
-    try {
-        const { id } = req.params
-        const { firstName, lastName } = req.body
-        const user = await repo.user.update({ id }, { firstName, lastName })
+// module.exports.update = async (req, res, next) => {
+//     try {
+//         const { id } = req.params
+//         const { firstName, lastName } = req.body
+//         const user = await repo.user.update({ id }, { firstName, lastName })
 
-        res.status(200).json({ user })
-    } catch (err) {
-        next(err)
-    }
-    return
-}
-module.exports.delete = async (req, res, next) => {
-    try {
-        const { id } = req.params
-        await repo.user.delete({ id })
-        res.status(200)
-    } catch (err) {
-        next(err)
-    }
-    return
-}
+//         res.status(200).json({ user })
+//     } catch (err) {
+//         next(err)
+//     }
+//     return
+// }
+// module.exports.delete = async (req, res, next) => {
+//     try {
+//         const { id } = req.params
+//         await repo.user.delete({ id })
+//         res.status(200)
+//     } catch (err) {
+//         next(err)
+//     }
+//     return
+// }
