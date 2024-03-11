@@ -5,6 +5,6 @@ const authenticate = require("../middlewares/authenticate")
 const viewerRoute = express.Router()
 
 // viewerRoute.get("/", c.vi)
-// viewerRoute.post("/", c.vi)
+viewerRoute.post("/:postId", c.viewer.createViewer)
 
 module.exports = viewerRoute

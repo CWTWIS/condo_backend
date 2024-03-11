@@ -35,7 +35,6 @@ exports.createPost = utils.catchErrorCreatePost(async (req, res, next) => {
     } = req.body
 
     let condoObj = await repo.condo.findCondoByName(nameTh, nameEn)
-    console.log("condoObj", condoObj)
 
     if (!condoObj) {
         const condoData = {
@@ -191,7 +190,6 @@ exports.editPost = utils.catchErrorCreatePost(async (req, res, next) => {
 
         await repo.roomImage.createRoomImage({ roomId: roomObj.id, roomImage })
     }
-
     res.status(200).json({ post: { ...req.body, id: postObj.id } })
 })
 
@@ -211,7 +209,6 @@ exports.getPostByPostId = utils.catchError(async (req, res, next) => {
 })
 
 exports.getPostsByUserId = utils.catchError(async (req, res, next) => {
-    // comment
     const active = await repo.post.getActivePostsByUserId(+req.params.userId)
     const inactive = await repo.post.getInactivePostsByUserId(+req.params.userId)
     res.status(200).json({ posts: { active, inactive } })
@@ -284,4 +281,10 @@ exports.getPostInCondo = utils.catchError(async (req, res, next) => {
     const id = +req.params.condoId
     const posts = await repo.post.getPostInCondo(id)
     res.status(200).json({ posts })
+})
+
+exports.increaseTotalViewer = utils.catchError(async (req, res, next) => {
+    const postId = +req.params.postId
+    const post = await repo.post.increaseTotalViewer(postId)
+    res.status(200).json({ post })
 })
