@@ -146,9 +146,6 @@ exports.editPost = utils.catchErrorCreatePost(async (req, res, next) => {
             condoData.condoImage = await utils.cloudinaryUpload.upload(req.files?.condoImage?.[0].path)
         }
         condoObj = await repo.condo.createCondo(condoData)
-    } else {
-        const existedRoom = await repo.room.findRoomByRoomNumberFloorBuildingCondoId(roomNumber, floor, building, condoObj.id)
-        if (existedRoom) throw new CustomError("ROOM_EXISTED", "403_FORBIDDEN", 403)
     }
 
     const roomData = {
