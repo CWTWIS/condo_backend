@@ -40,6 +40,20 @@ module.exports.getPosts = async () =>
     })
 
 // =========================================== CUSTOM REPOSITORY ===================================
+module.exports.getActivePosts = async () =>
+    await prisma.post.findMany({
+        where: { postStatus: true },
+        include: {
+            room: {
+                include: {
+                    condo: { include: { district: true, province: true } },
+                    roomFacilities: { include: { facility: true } },
+                    roomImages: true,
+                },
+            },
+        },
+    })
+
 module.exports.getPostByPostId = async (postId) =>
     await prisma.post.findFirst({
         where: { id: postId },

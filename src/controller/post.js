@@ -95,9 +95,7 @@ exports.createPost = utils.catchErrorCreatePost(async (req, res, next) => {
         if (typeof roomImageObj.file === "string" && roomImageObj.file !== "") {
             roomImage = roomImageObj.file
         } else {
-            console.log("in create")
             roomImage = await utils.cloudinaryUpload.upload(req.files.roomImages?.[roomImageFileCount].path)
-            console.log("roomImageFileCount", roomImageFileCount)
             roomImageFileCount++
         }
 
@@ -131,7 +129,6 @@ exports.editPost = utils.catchErrorCreatePost(async (req, res, next) => {
     } = req.body
 
     let condoObj = await repo.condo.findCondoByName(nameTh, nameEn)
-    console.log("condoObj", condoObj)
 
     if (!condoObj) {
         const condoData = {
@@ -147,8 +144,6 @@ exports.editPost = utils.catchErrorCreatePost(async (req, res, next) => {
 
         if (req.files?.condoImage?.length > 0) {
             condoData.condoImage = await utils.cloudinaryUpload.upload(req.files?.condoImage?.[0].path)
-        } else if (typeof condoImage === "string" && condoImage !== "") {
-            condoData.condoImage = condoImage
         }
         condoObj = await repo.condo.createCondo(condoData)
     }
@@ -202,6 +197,11 @@ exports.editPost = utils.catchErrorCreatePost(async (req, res, next) => {
 
 exports.getPosts = utils.catchError(async (req, res, next) => {
     const posts = await repo.post.getPosts()
+    res.status(200).json({ posts })
+})
+
+exports.getActivePosts = utils.catchError(async (req, res, next) => {
+    const posts = await repo.post.getActivePosts()
     res.status(200).json({ posts })
 })
 
