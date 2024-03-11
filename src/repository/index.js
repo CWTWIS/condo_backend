@@ -10,5 +10,6 @@ const repo = {
     select: require("./select"),
     payment: require("./payment"),
     review: require("./review"),
+    viewer: require("./viewer"),
 }
 module.exports = repo

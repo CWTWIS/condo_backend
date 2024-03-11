@@ -8,6 +8,7 @@ const controller = {
     transaction: require("./transaction"),
     select: require("./select"),
     review: require("./review"),
+    viewer: require("./viewer"),
     ip: require("./ip"),
 }
 module.exports = controller

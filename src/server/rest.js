@@ -50,7 +50,7 @@ module.exports = function restApiServer(app) {
     app.use("/transaction", transactionRoute)
     app.use("/select", selectRoute)
     app.use("/review", reviewRoute)
-    // app.use("/viewer", viewerRoute)
+    app.use("/viewer", viewerRoute)
     app.use("/ip", ipRoute)
     //=====================================================Throwing Zone
     app.use(notFound)

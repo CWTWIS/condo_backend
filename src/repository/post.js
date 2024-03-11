@@ -107,6 +107,6 @@ module.exports.getPostInCondo = async (condoId) =>
             },
         },
     })
-module.exports.editPostById = async (postId, editedData) => {
-    await prisma.update({ where: { id: postId }, data: { editedData } })
-}
+module.exports.editPostById = async (postId, editedData) => await prisma.post.update({ where: { id: postId }, data: { editedData } })
+
+module.exports.increaseTotalViewer = async (postId) => await prisma.post.update({ where: { id: +postId }, data: { totalViewer: { increment: 1 } } })
