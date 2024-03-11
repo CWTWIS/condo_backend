@@ -36,6 +36,7 @@ module.exports.updatePost = async (data, postId) => await prisma.post.update({ w
 
 module.exports.getPosts = async () =>
     await prisma.post.findMany({
+        where: { postStatus: true },
         include: { room: { include: { condo: true } } },
     })
 
