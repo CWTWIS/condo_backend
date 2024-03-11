@@ -11,3 +11,5 @@ module.exports.findRoomByRoomNumberFloorBuildingCondoId = async (roomNumber, flo
         where: { roomNumber, floor, building, condoId },
     })
 }
+
+module.exports.getMinMaxPrice = async () => await prisma.room.aggregate({ _min: { price: true }, _max: { price: true } })
