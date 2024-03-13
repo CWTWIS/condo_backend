@@ -77,7 +77,7 @@ io.on("connection", (socket) => {
                 sender: { ...messageObj.authUser },
             }
 
-            socket.emit("message", newMessageObj)
+            io.emit("message", newMessageObj)
 
             const imageName = `image_${Date.now()}.jpg`
             const path = `public/images/${imageName}`
