@@ -2,6 +2,16 @@
 const express = require("express")
 const dotenv = require("dotenv")
 const http = require("http")
+const fs = require("fs")
+const { writeFileSync } = require("fs")
+
+const cloudinary = require("cloudinary").v2
+
+cloudinary.config({
+    cloud_name: "dl2twysji",
+    api_key: "689749785935295",
+    api_secret: "Hf988q1KUfGIbGOmtlGZxzS8Om0",
+})
 
 /////////////gotta move
 const repo = require("./repository")
@@ -24,6 +34,7 @@ restApiServer(app)
 //=====================================================Listening Zone
 
 const { Server } = require("socket.io")
+// const cloudinary = require("./config/cloudinary")
 
 const io = new Server(server, {
     cors: {
@@ -31,69 +42,77 @@ const io = new Server(server, {
         credentials: true,
         methods: ["GET", "POST"],
     },
+    maxHttpBufferSize: 1e8,
 })
-
-// const onlineUser = {};
-
-// io.use((socket, next) => {
-//   const userId = socket.handshake.auth.id;
-//   onlineUser[userId] = socket.id;
-//   next();
-// });
-
-// io.on("connection", (socket) => {
-//   console.log("chat server online");
-//   socket.on("message", (msg) => {
-//     io.emit("recieved", msg);
-//   });
-//   socket.on("disconnect", () => {
-//     console.log("user disconnected");
-//   });
-// });
 
 ///////// from yt
 io.on("connection", (socket) => {
     console.log("we have a new connection!!!")
 
-    // socket.on("join", ({ name, room }, callback) => {
-    //     const { error, user } = addUser({ id: socket.id, name, room })
-
-    //     if (error) return callback(error)
-
-    //     socket.emit("message", { user: "admin", text: `${user.name}, welcome to the room ${user.room}` })
-
-    //     socket.broadcast.to(user.room).emit("message", { user: "admin", text: `${user.name}, has joined` })
-    //     socket.join(user.room)
-
-    //     callback()
-    // })
     socket.on("sendMessage", async (messageObj, callback) => {
         // const user = getUser(socket.id)
-        console.log("i did")
         const newMessageObj = await repo.chat.createChat({
             senderId: messageObj.authUser.id,
             receiverId: messageObj.talker.talkerId,
             message: messageObj.message,
         })
 
-        // io.to(user.room).emit("message", { user: user.name, text: message })
         io.emit("message", {
             ...newMessageObj,
             sender: { ...messageObj.authUser },
-            // message: messageObj.message,
-            // createdAt: new Date(),
         })
+
+        callback()
+    })
+
+    socket.on("sendImage", async (messageObj, callback) => {
+        // const user = getUser(socket.id)
+        try {
+            const newMessageObj = {
+                id: socket.id,
+                senderId: messageObj.authUser.id,
+                receiverId: messageObj.talker.talkerId,
+                message: messageObj.url,
+                createdAt: new Date(),
+                sender: { ...messageObj.authUser },
+            }
+
+            socket.emit("message", newMessageObj)
+
+            const imageName = `image_${Date.now()}.jpg`
+            const path = `public/images/${imageName}`
+
+            writeFileSync(path, messageObj.image, (err) => {
+                callback({ message: err ? "failure" : "success" })
+            })
+            const buffer = fs.readFileSync(path)
+
+            cloudinary.uploader
+                .upload_stream({ resource_type: "image" }, (error, result) => {
+                    if (error) {
+                        console.error(error)
+                    } else {
+                        const run = async () => {
+                            await repo.chat.createChat({
+                                senderId: messageObj.authUser.id,
+                                receiverId: messageObj.talker.talkerId,
+                                message: result.secure_url,
+                            })
+                        }
+                        run()
+                    }
+                })
+                .end(buffer)
+            fs.unlinkSync(path)
+        } catch (err) {
+            console.log(err)
+        }
 
         callback()
     })
 
     socket.on("disconnect", () => {
         console.log("user disconected")
-        // const user = removeUser(socket.id)
-
-        // if (user) {
-        //     io.to(user.room).emit("message", { user: "admin", text: `${user.name} has left` })
-        // }
     })
 })
 
