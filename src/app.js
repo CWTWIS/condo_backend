@@ -8,9 +8,9 @@ const { writeFileSync } = require("fs")
 const cloudinary = require("cloudinary").v2
 
 cloudinary.config({
-    cloud_name: "dl2twysji",
-    api_key: "689749785935295",
-    api_secret: "Hf988q1KUfGIbGOmtlGZxzS8Om0",
+    cloud_name: process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
 })
 
 /////////////gotta move
