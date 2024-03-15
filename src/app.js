@@ -68,16 +68,16 @@ io.on("connection", (socket) => {
     socket.on("sendImage", async (messageObj, callback) => {
         // const user = getUser(socket.id)
         try {
-            const newMessageObj = {
-                id: socket.id,
-                senderId: messageObj.authUser.id,
-                receiverId: messageObj.talker.talkerId,
-                message: messageObj.url,
-                createdAt: new Date(),
-                sender: { ...messageObj.authUser },
-            }
+            // const newMessageObj = {
+            //     id: socket.id,
+            //     senderId: messageObj.authUser.id,
+            //     receiverId: messageObj.talker.talkerId,
+            //     message: messageObj.url,
+            //     createdAt: new Date(),
+            //     sender: { ...messageObj.authUser },
+            // }
 
-            io.emit("message", newMessageObj)
+            // io.emit("message", newMessageObj)
 
             const imageName = `image_${Date.now()}.jpg`
             const path = `public/images/${imageName}`
@@ -93,11 +93,12 @@ io.on("connection", (socket) => {
                         console.error(error)
                     } else {
                         const run = async () => {
-                            await repo.chat.createChat({
+                            const newMessageObj = await repo.chat.createChat({
                                 senderId: messageObj.authUser.id,
                                 receiverId: messageObj.talker.talkerId,
                                 message: result.secure_url,
                             })
+                            ;(newMessageObj.sender = { ...messageObj.authUser }), io.emit("message", newMessageObj)
                         }
                         run()
                     }
